@@ -1,0 +1,27 @@
+name: Build ProjectService
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore ./ProjectService/ProjectService.sln
+
+    - name: Build
+      run: dotnet build ./ProjectService/ProjectService.sln --no-restore -c Release
+
+    - name: Test
+      run: dotnet test ./ProjectService/ProjectService.sln --no-build -c Release --verbosity normal
