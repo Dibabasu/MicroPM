@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+namespace ProjectService.Application.Common.Models;
 public class PagedList<T> : List<T>
 {
     public int CurrentPage { get; private set; }

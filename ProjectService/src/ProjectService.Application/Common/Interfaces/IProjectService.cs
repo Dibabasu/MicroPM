@@ -1,3 +1,4 @@
+using ProjectService.Domain.Common;
 using ProjectService.Domain.Entity;
 
 namespace ProjectService.Application.Common.Interfaces;
@@ -9,7 +10,12 @@ public interface IProjectService
 
     public Task<Project>? GetProjectByIdAsync(Guid projectId,CancellationToken cancellationToken);
 
-    public Task<List<Project>> GetAllProjectsAsync(CancellationToken cancellationToken);
+    public IQueryable<Project> GetProjects(
+    ProjectStatus? Status,
+    Guid? OwnerId,
+    DateTime? FromDate,
+    DateTime? ToDate,
+    string? OrderBy);
 
     public Task UpdateProject(Project project,CancellationToken cancellationToken);
     public Task<bool> DeleteProjectById(Project project,CancellationToken cancellationToken);
