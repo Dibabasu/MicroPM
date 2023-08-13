@@ -80,7 +80,7 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
             {
                 foreach (var component in request.Components)
                 {
-                    project.AddComponent(new Details(component.Name, component.Description));
+                    project.AddComponent(new Details(component.ComponentName, component.ComponentDescription));
                 }
 
             }

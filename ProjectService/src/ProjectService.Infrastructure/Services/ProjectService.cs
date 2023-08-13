@@ -1,5 +1,11 @@
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using ProjectService.Application.Common.Interfaces;
+using ProjectService.Application.Common.Models;
+using ProjectService.Application.DTO;
+using ProjectService.Application.DTOs;
+using ProjectService.Application.Projects.Queries.GetProjects;
+using ProjectService.Domain.Common;
 using ProjectService.Domain.Entity;
 using ProjectService.Infrastructure.Persistence;
 
@@ -20,18 +26,10 @@ public class ProjectServices : IProjectService
         await _context.SaveChangesAsync();
         return project.Id;
     }
-
-
     public async Task<bool> DeleteProjectById(Project project, CancellationToken cancellationToken)
     {
         _context.Remove(project);
         return await _context.SaveChangesAsync(cancellationToken) > 0;
-    }
-
-
-    public Task<List<Project>> GetAllProjectsAsync(CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<Project>? GetProjectByIdAsync(Guid projectId, CancellationToken cancellationToken)
@@ -43,25 +41,62 @@ public class ProjectServices : IProjectService
     {
         return await _context.Projects.FirstOrDefaultAsync(p => p.Details.Name == projectName, cancellationToken);
     }
-
-    public Task<List<Project>> GetProjectsByNameAndIdAsync(string projectName, Guid projectId, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Project>> GetProjectsByNameAsync(string projectName, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Project>> GetProjectsByNameOrIdAsync(string projectName, Guid projectId, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task UpdateProject(Project project, CancellationToken cancellationToken)
     {
         _context.Update(project);
         await _context.SaveChangesAsync(cancellationToken);
     }
+    public IQueryable<Project> GetProjects(
+    ProjectStatus? status,
+    Guid? ownerId,
+    DateTime? fromDate,
+    DateTime? toDate,
+    string? orderBy)
+    {
+        var query = _context.Projects
+            .Include(c=>c.Components)
+            .Include(pu=>pu.ProjectUsers)
+            .AsNoTracking();
+           
+
+        if (status.HasValue)
+        {
+            query = query.Where(p => p.ProjectStatus == status.Value);
+        }
+
+        if (ownerId.HasValue)
+        {
+            query = query.Where(p => p.OwnerId == ownerId.Value);
+        }
+
+        if (fromDate.HasValue)
+        {
+            query = query.Where(p => p.Created >= fromDate.Value);
+        }
+
+        if (toDate.HasValue)
+        {
+            query = query.Where(p => p.Created <= toDate.Value);
+        }
+
+        if (!string.IsNullOrEmpty(orderBy))
+        {
+            switch (orderBy.ToLower())
+            {
+                case "name":
+                    query = query.OrderBy(p => p.Details.Name);
+                    break;
+                case "createddate":
+                    query = query.OrderBy(p => p.Created);
+                    break;
+                case "status":
+                    query = query.OrderBy(p => p.ProjectStatus);
+                    break;
+            }
+        }
+        
+
+        return query;
+    }
+
 }
