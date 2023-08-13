@@ -15,7 +15,7 @@ public class CreateProjectCommand : IRequest<OneOf<Guid, ProjectServiceException
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Owner { get; set; } = string.Empty;
-    public List<ComponentDTO>? Components { get; set; }
+    public List<ComponentDto>? Components { get; set; }
     public List<string>? UserGroup { get; set; }
     public List<string>? Users { get; set; }
     public string Workflow { get; set; } = string.Empty;
@@ -80,7 +80,7 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
             {
                 foreach (var component in request.Components)
                 {
-                    project.AddComponent(new Details(component.Name, component.Description));
+                    project.AddComponent(new Details(component.ComponentName, component.ComponentDescription));
                 }
 
             }

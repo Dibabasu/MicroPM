@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+namespace ProjectService.Application.Common.Models;
 public class PagedList<T> : List<T>
 {
     public int CurrentPage { get; private set; }
@@ -19,7 +20,7 @@ public class PagedList<T> : List<T>
         AddRange(items);
     }
 
-    public static async Task<PagedList<T>> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize)
+    public static async Task<PagedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize)
     {
         var count = await source.CountAsync();
         var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();

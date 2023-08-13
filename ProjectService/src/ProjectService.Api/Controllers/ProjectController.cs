@@ -8,6 +8,7 @@ using ProjectService.Application.Projects.Commands.UpdateProject;
 using ProjectService.Application.Projects.Commands.UpdateUserGroupsToProject;
 using ProjectService.Application.Projects.Commands.UpdateUsersToProject;
 using ProjectService.Application.Projects.Commands.UpdateWorkFlowToProject;
+using ProjectService.Application.Projects.Queries.GetProjects;
 
 namespace ProjectService.Api.Controllers
 {
@@ -15,6 +16,12 @@ namespace ProjectService.Api.Controllers
     [Route("api/[controller]")]
     public class ProjectController : ApiControllerBase
     {
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery]GetProjectsQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return ResultHandler.Handle(result);
+        }
         [HttpPost]
         public async Task<IActionResult> Create(CreateProjectCommand command)
         {
