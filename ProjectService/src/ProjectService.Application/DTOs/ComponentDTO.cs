@@ -1,8 +1,19 @@
-namespace ProjectService.Application.DTOs
+using Mapster;
+using ProjectService.Application.Common.Mappings;
+
+public class ComponentDto : IMapFrom<ProjectService.Domain.Entity.Component>
 {
-    public class ComponentDto
+    public Guid ComponentId { get; set; }
+    public Guid ProjectId { get; set; }
+    public string ComponentName { get; set; }
+    public string ComponentDescription { get; set; } 
+
+    public void Mapping(TypeAdapterConfig config)
     {
-        public string Name { get; set; }=string.Empty;
-        public string Description { get; set; }=string.Empty;
+        config.NewConfig<ProjectService.Domain.Entity.Component, ComponentDto>()
+            .Map(dest => dest.ComponentName, src => src.Details.Name)
+            .Map(dest => dest.ComponentDescription, src => src.Details.Description)
+            .Map(dest => dest.ProjectId, src => src.ProjectId)
+            .Map(dest => dest.ComponentId, src => src.Id);
     }
 }
