@@ -12,7 +12,7 @@ using ProjectService.Infrastructure.Persistence;
 namespace ProjectService.Infrastructure.Migrations
 {
     [DbContext(typeof(ProjectServiceDbContext))]
-    [Migration("20230807210538_InitialCommit")]
+    [Migration("20230813142146_InitialCommit")]
     partial class InitialCommit
     {
         /// <inheritdoc />
@@ -27,7 +27,7 @@ namespace ProjectService.Infrastructure.Migrations
 
             modelBuilder.Entity("ProjectService.Domain.Entity.Component", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ComponentId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("componentid");
 
@@ -56,7 +56,7 @@ namespace ProjectService.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("modifiedby");
 
-                    b.HasKey("Id", "ProjectId");
+                    b.HasKey("ComponentId", "ProjectId");
 
                     b.HasIndex("ProjectId")
                         .HasDatabaseName("idx_components_projectid");
@@ -66,7 +66,7 @@ namespace ProjectService.Infrastructure.Migrations
 
             modelBuilder.Entity("ProjectService.Domain.Entity.Project", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("projectid");
 
@@ -104,7 +104,7 @@ namespace ProjectService.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("workflowid");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProjectId");
 
                     b.HasIndex("ProjectStatus")
                         .HasDatabaseName("idx_projects_projectstatus");

@@ -33,7 +33,9 @@ public class ProjectServiceDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
+        optionsBuilder.UseSqlServer(o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
     }
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         await _mediator.DispatchDomainEvents(this);
