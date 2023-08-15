@@ -1,10 +1,8 @@
 using MediatR;
 using ProjectService.Application.Common.Interfaces;
 using ProjectService.Domain.Entity;
-using ProjectService.Application.DTOs;
 using ProjectService.Application.Common.Errors;
 using OneOf;
-using ProjectService.Application.Common;
 using ProjectService.Domain.Common;
 using Serilog;
 
