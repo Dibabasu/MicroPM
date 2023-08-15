@@ -9,16 +9,13 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
     public void Configure(EntityTypeBuilder<Project> builder)
     {
         builder.ToTable("projects");
-        builder.HasKey(p => p.Id);
-        builder.Property(p => p.Id)
+        builder.HasKey(p => p.ProjectId);
+        builder.Property(p => p.ProjectId)
             .HasColumnName("projectid")
             .IsRequired()
             .ValueGeneratedNever();
-        builder.Property(p => p.Id)
-            .HasColumnName("projectid")
-            .IsRequired();
 
-        builder.OwnsOne(p => p.Details,
+        builder.OwnsOne(p => p.ProjectDetails,
             navigationBuilder =>
                 {
                     navigationBuilder.Property(d => d.Name)

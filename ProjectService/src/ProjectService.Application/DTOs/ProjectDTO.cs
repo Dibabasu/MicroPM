@@ -6,8 +6,8 @@ using ProjectService.Domain.Entity;
 namespace ProjectService.Application.DTO;
 public class ProjectDto : IMapFrom<Project>
 {
-    public Guid Id { get; set; }
-    public DetailsDto? Details { get; set; }
+    public Guid ProjectId { get; set; }
+    public DetailsDto? ProjectDetails { get; set; }
     public Guid OwnerId { get; set; }
     public ICollection<ComponentDto>? Components { get; set; }
     public Guid WorkflowId { get; set; }
@@ -17,8 +17,8 @@ public class ProjectDto : IMapFrom<Project>
     public void Mapping(TypeAdapterConfig config)
     {
         config.NewConfig<Project, ProjectDto>()
-            .Map(dest => dest.Id, src => src.Id)
-            .Map(dest => dest.Details, src => src.Details)
+            .Map(dest => dest.ProjectId, src => src.ProjectId)
+            .Map(dest => dest.ProjectDetails, src => src.ProjectDetails)
             .Map(dest => dest.OwnerId, src => src.OwnerId)
             .Map(dest => dest.Components, src => src.Components)
             .Map(dest => dest.WorkflowId, src => src.WorkflowId)

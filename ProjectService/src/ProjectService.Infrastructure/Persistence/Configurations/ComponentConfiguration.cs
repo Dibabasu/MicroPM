@@ -9,14 +9,14 @@ public class ComponentConfiguration : IEntityTypeConfiguration<Component>
     public void Configure(EntityTypeBuilder<Component> builder)
     {
         builder.ToTable("components");
-        builder.HasKey(c => new { c.Id, c.ProjectId });
-        builder.Property(c => c.Id)
+        builder.HasKey(c => new { c.ComponentId, c.ProjectId });
+        builder.Property(c => c.ComponentId)
             .HasColumnName("componentid")
             .ValueGeneratedNever();
         builder.Property(c => c.ProjectId)
             .HasColumnName("projectid");
 
-        builder.OwnsOne(p => p.Details,
+        builder.OwnsOne(p => p.ComponentDetails,
             navigationBuilder =>
                 {
                     navigationBuilder.Property(d => d.Name)

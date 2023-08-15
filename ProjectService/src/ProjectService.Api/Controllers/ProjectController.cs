@@ -8,6 +8,7 @@ using ProjectService.Application.Projects.Commands.UpdateProject;
 using ProjectService.Application.Projects.Commands.UpdateUserGroupsToProject;
 using ProjectService.Application.Projects.Commands.UpdateUsersToProject;
 using ProjectService.Application.Projects.Commands.UpdateWorkFlowToProject;
+using ProjectService.Application.Projects.Queries.FindProject;
 using ProjectService.Application.Projects.Queries.GetProjects;
 
 namespace ProjectService.Api.Controllers
@@ -16,8 +17,14 @@ namespace ProjectService.Api.Controllers
     [Route("api/[controller]")]
     public class ProjectController : ApiControllerBase
     {
+        [HttpGet("FindProject")]
+        public async Task<IActionResult> FindProject([FromQuery] FindProjectQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return ResultHandler.Handle(result);
+        }
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery]GetProjectsQuery query)
+        public async Task<IActionResult> Get([FromQuery] GetProjectsQuery query)
         {
             var result = await Mediator.Send(query);
             return ResultHandler.Handle(result);
@@ -29,7 +36,7 @@ namespace ProjectService.Api.Controllers
             return ResultHandler.Handle(result);
         }
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody]DeleteProjectCommand command)
+        public async Task<IActionResult> Delete([FromBody] DeleteProjectCommand command)
         {
             var result = await Mediator.Send(command);
             return ResultHandler.Handle(result);

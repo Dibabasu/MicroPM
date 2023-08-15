@@ -4,8 +4,8 @@ using ProjectService.Domain.Event;
 namespace ProjectService.Domain.Entity;
 public class Project : AuditableEntity
 {
-    public Guid Id { get; private set; }
-    public Details Details { get; private set; }
+    public Guid ProjectId { get; private set; }
+    public Details ProjectDetails { get; private set; }
     public Guid OwnerId { get; private set; }
     public ICollection<Component> Components { get; private set; } = new HashSet<Component>();
     public Guid WorkflowId { get; private set; }
@@ -13,10 +13,10 @@ public class Project : AuditableEntity
     public ICollection<ProjectUser> ProjectUsers { get; private set; } = new HashSet<ProjectUser>();
     public ProjectStatus ProjectStatus { get; private set; }
 
-    public Project(Details details, Guid ownerId, Guid workflowId)
+    public Project(Details projectDetails, Guid ownerId, Guid workflowId)
     {
-        Id = Guid.NewGuid();
-        Details = details;
+        ProjectId = Guid.NewGuid();
+        ProjectDetails = projectDetails;
         OwnerId = ownerId;
         Components = new List<Component>();
         WorkflowId = workflowId;
@@ -31,7 +31,7 @@ public class Project : AuditableEntity
     }
     public void RemoveComponent(Guid componentId)
     {
-        var component = Components.FirstOrDefault(c => c.Id == componentId);
+        var component = Components.FirstOrDefault(c => c.ComponentId == componentId);
         if (component != null)
         {
             Components.Remove(component);
@@ -83,9 +83,9 @@ public class Project : AuditableEntity
     {
         RemoveUser(adminId);
     }
-    public void UpdateDetails(Details details)
+    public void UpdateDetails(Details projectdetails)
     {
-        Details = details;
+        ProjectDetails= projectdetails;
     }
     public void UpdateWorkFlow(Guid workflowId)
     {

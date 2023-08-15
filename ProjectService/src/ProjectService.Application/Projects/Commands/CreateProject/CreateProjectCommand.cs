@@ -1,10 +1,8 @@
 using MediatR;
 using ProjectService.Application.Common.Interfaces;
 using ProjectService.Domain.Entity;
-using ProjectService.Application.DTOs;
 using ProjectService.Application.Common.Errors;
 using OneOf;
-using ProjectService.Application.Common;
 using ProjectService.Domain.Common;
 using Serilog;
 
@@ -45,7 +43,7 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
         {
             var owner = await _validationService.ValidateUser(request.Owner);
             Project project = new(
-                details: new Details(request.Name, request.Description),
+                projectDetails: new Details(request.Name, request.Description),
                 ownerId: owner,
                 workflowId: await _validationService.ValidateWorkflow(request.Workflow));
             if (request.Admin != null)
@@ -80,12 +78,13 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
             {
                 foreach (var component in request.Components)
                 {
-                    project.AddComponent(new Details(component.ComponentName, component.ComponentDescription));
+                    project.AddComponent(new Details(component.ComponentDetails.Name,
+                        component.ComponentDetails.Name));
                 }
 
             }
             await _projectService.AddProject(project);
-            return project.Id;
+            return project.ProjectId;
         }
         catch(ProjectServiceException ex)
         {

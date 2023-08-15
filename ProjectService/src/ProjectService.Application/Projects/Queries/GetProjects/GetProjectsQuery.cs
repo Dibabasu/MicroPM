@@ -3,10 +3,8 @@ using MediatR;
 using OneOf;
 using ProjectService.Application.Common.Errors;
 using ProjectService.Application.Common.Interfaces;
-using ProjectService.Application.Common.Mappings;
 using ProjectService.Application.Common.Models;
 using ProjectService.Application.DTO;
-using ProjectService.Application.DTOs;
 using ProjectService.Domain.Common;
 
 namespace ProjectService.Application.Projects.Queries.GetProjects;
@@ -33,18 +31,21 @@ public class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery, OneOf<P
     public async Task<OneOf<PagedList<ProjectDto>, ProjectServiceException>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
     {
         var projectsQuery = _projectService.GetProjects(
-        request.Status,
-        request.OwnerId,
-        request.FromDate,
-        request.ToDate,
-        request.OrderBy);
+                                            request.Status,
+                                            request.OwnerId,
+                                            request.FromDate,
+                                            request.ToDate,
+                                            request.OrderBy);
 
         if (!projectsQuery.Any())
         {
             throw new EmptyOrNullException("No projects found");
         }
 
+        projectsQuery = projectsQuery.OrderBy(p => p.ProjectId); 
+
         var projectDtos = await PagedList<ProjectDto>.CreateAsync(projectsQuery.ProjectToType<ProjectDto>(), request.PageNumber, request.PageSize);
+
         return projectDtos;
     }
 }
