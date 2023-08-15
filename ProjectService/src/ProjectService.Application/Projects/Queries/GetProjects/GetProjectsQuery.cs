@@ -3,10 +3,8 @@ using MediatR;
 using OneOf;
 using ProjectService.Application.Common.Errors;
 using ProjectService.Application.Common.Interfaces;
-using ProjectService.Application.Common.Mappings;
 using ProjectService.Application.Common.Models;
 using ProjectService.Application.DTO;
-using ProjectService.Application.DTOs;
 using ProjectService.Domain.Common;
 
 namespace ProjectService.Application.Projects.Queries.GetProjects;

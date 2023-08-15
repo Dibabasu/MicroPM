@@ -32,8 +32,14 @@ public class ProjectServiceDbContext : DbContext
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer(o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+        }
+
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
-        optionsBuilder.UseSqlServer(o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+
+        optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
