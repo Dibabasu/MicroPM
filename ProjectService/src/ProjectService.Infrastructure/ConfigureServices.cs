@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using ProjectService.Application.Common;
 using ProjectService.Application.Common.Errors;
 using ProjectService.Application.Common.Interfaces;
+using ProjectService.Infrastructure.HealthChecks;
 using ProjectService.Infrastructure.Persistence;
 using ProjectService.Infrastructure.Persistence.Interceptors;
 using ProjectService.Infrastructure.Services;
@@ -18,6 +20,19 @@ public static class ConfigureServices
 
         services.AddDbContext<ProjectServiceDbContext>(options =>
             options.UseSqlServer(ProjectServiceConfig.ConnectionString));
+
+        
+        services.AddHealthChecks()
+         .AddSqlServer(
+         connectionString: ProjectServiceConfig.ConnectionString,
+         healthQuery: "SELECT 1;",
+         name: "sql",
+         failureStatus: HealthStatus.Degraded,
+         tags: new string[] { "db", "sql", "sqlserver" });
+
+         services.AddHealthChecks()
+        .AddCheck<DatabaseHealthCheck>("Database");
+
 
         services.AddTransient<IComponentService, ComponentService>();
         services.AddTransient<IDateTime, DateTimeService>();
