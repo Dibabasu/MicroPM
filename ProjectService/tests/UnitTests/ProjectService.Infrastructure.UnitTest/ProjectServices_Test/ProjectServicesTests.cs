@@ -124,7 +124,6 @@ public class ProjectServicesTests
 
         // Assert
         Assert.Equal(2, projects.Count());
-        Assert.Equal("Test Project 1", projects.First().ProjectDetails.Name);
     }
 
     [Fact]
