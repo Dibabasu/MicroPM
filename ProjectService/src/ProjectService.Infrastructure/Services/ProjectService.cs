@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using ProjectService.Application.Common.Errors;
 using ProjectService.Application.Common.Interfaces;
 using ProjectService.Domain.Common;
 using ProjectService.Domain.Entity;
@@ -24,6 +25,11 @@ public class ProjectServices : IProjectService
     }
     public async Task<bool> DeleteProjectById(Project project, CancellationToken cancellationToken)
     {
+        var ProjectExist =await GetProjectByIdAsync(project.ProjectId,cancellationToken);
+        if(ProjectExist is null)
+        {
+            return false;
+        }
         _context.Remove(project);
         return await _context.SaveChangesAsync(cancellationToken) > 0;
     }
@@ -39,6 +45,11 @@ public class ProjectServices : IProjectService
     }
     public async Task UpdateProject(Project project, CancellationToken cancellationToken)
     {
+        var ProjectExist =await GetProjectByIdAsync(project.ProjectId,cancellationToken);
+        if(ProjectExist is null)
+        {
+            throw new NotFoundException(nameof(project),project.ProjectId);
+        }
         _context.Update(project);
         await _context.SaveChangesAsync(cancellationToken);
     }
