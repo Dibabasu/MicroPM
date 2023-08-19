@@ -1,30 +1,38 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
+
 # copy all the layers' csproj files into respective folders
 COPY ["./src/ProjectService.Domain/ProjectService.Domain.csproj", "src/ProjectService.Domain/"]
 COPY ["./src/ProjectService.Application/ProjectService.Application.csproj", "src/ProjectService.Application/"]
-COPY ["./src/ProjectService.Infrastructure/ProjectService.Infrastructure.csproj", "src/ProjectService.Infrastructure/"]
-COPY ["./src/ProjectService.Api/ProjectService.Api.csproj", "src/ProjectService.Api/"]
+COPY ["./src/ProjectService.Infrastructure/ProjectService.Infrastructure.csproj", "src/ProjectService.InfrastructureCore/"]
+COPY ["./src/ProjectService.Api/ProjectService.Api.csproj ", "src/ProjectService.Api/"]
+
 
 # run restore over API project - this pulls restore over the dependent projects as well
 RUN dotnet restore "src/ProjectService.Api/ProjectService.Api.csproj"
 
 COPY . .
 
-WORKDIR "/src/src/ProjectService.Api"
-RUN dotnet build "ProjectService.Api.csproj" -c Release -o /app/build
+# run build over the API project
+WORKDIR "/src/ProjectService.Api/"
+RUN dotnet build -c Release -o /app/build
 
-
-FROM build AS publish
-RUN dotnet publish "ProjectService.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+# Build runtime image.
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
+COPY --from=build-env /app/out .
+
+# run publish over the API project
+FROM build AS publish
+RUN dotnet publish -c Release -o /app/publish
+
+FROM base AS runtime
+WORKDIR /app
+
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ProjectService.Api.dll"]
+RUN ls -l
+ENTRYPOINT [ "dotnet", "ProjectService.Api.dll" ]
