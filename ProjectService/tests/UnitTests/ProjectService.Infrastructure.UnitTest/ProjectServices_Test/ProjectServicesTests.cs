@@ -74,7 +74,7 @@ public class ProjectServicesTests
 
         // Assert
         Assert.NotNull(fetchedProject);
-        Assert.Equal(projectId, fetchedProject.ProjectId);
+        Assert.Equal(projectId, fetchedProject.Id);
     }
 
     [Fact]

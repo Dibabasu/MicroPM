@@ -5,13 +5,21 @@ public record Details
     public string Description { get; init; }
     public Details(string name, string description)
     {
-        ValidateName(name);
-        ValidateDescription(description);
+        try
+        {
+            ValidateName(name);
+            ValidateDescription(description);
 
-        Name = name;
-        Description = description;
+            Name = name;
+            Description = description;
+        }
+        catch (ArgumentException e)
+        {
+            throw e;
+        }
     }
-    private void ValidateName(string name)
+
+    private static void ValidateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -38,7 +46,7 @@ public record Details
             throw new ArgumentException("Name cannot end with a special character.", nameof(name));
         }
     }
-    private void ValidateDescription(string description)
+    private static void ValidateDescription(string description)
     {
         if (string.IsNullOrWhiteSpace(description))
         {

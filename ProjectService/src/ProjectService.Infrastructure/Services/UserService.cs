@@ -8,9 +8,9 @@ namespace ProjectService.Infrastructure.Services
 {
     public class UserService : IUserService
     {
-        public Task<Guid> GetUserIdByUserNameAsync(string username, CancellationToken cancellationToken)
+        public async Task<Guid> GetUserIdByUserNameAsync(string username, CancellationToken cancellationToken)
         {
-            return Task.FromResult(Guid.NewGuid());
+            return (Guid.NewGuid());
         }
     }
 }

@@ -13,6 +13,6 @@ public class ComponentDto : IMapFrom<ProjectService.Domain.Entity.Component>
         config.NewConfig<ProjectService.Domain.Entity.Component, ComponentDto>()
             .Map(dest => dest.ComponentDetails, src => src.ComponentDetails)
             .Map(dest => dest.ProjectId, src => src.ProjectId)
-            .Map(dest => dest.ComponentId, src => src.ComponentId);
+            .Map(dest => dest.ComponentId, src => src.Id);
     }
 }

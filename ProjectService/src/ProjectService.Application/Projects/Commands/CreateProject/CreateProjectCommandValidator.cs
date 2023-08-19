@@ -9,9 +9,9 @@ public class CreateProjectCommandValidator : AbstractValidator<CreateProjectComm
     public CreateProjectCommandValidator(IProjectService projectService)
     {
         _projectService = projectService;
-        RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required.");
+        RuleFor(x => x.ProjectDescription).NotEmpty().WithMessage("Project Description is required.");
         RuleFor(x => x.Owner).NotEmpty().WithMessage("Owner is required.");
-        RuleFor(x => x.Name).NotEmpty().WithMessage("Project name is required.")
+        RuleFor(x => x.ProjectName).NotEmpty().WithMessage("Project name is required.")
              .MustAsync(async (name, cancellation) => !await DoesProjectAlreadyExist(name,cancellation))
              .WithMessage("Project name already exists.");
     }

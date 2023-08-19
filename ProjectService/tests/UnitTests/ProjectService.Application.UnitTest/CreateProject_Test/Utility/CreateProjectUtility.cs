@@ -10,9 +10,9 @@ public static class CreateProjectUtility
     {
         return new CreateProjectCommand
         {
-            Name = name,
-            Description = description,
-            Owner = owner
+            ProjectName=name,
+            ProjectDescription=description,
+            Owner=owner
         };
     }
 }

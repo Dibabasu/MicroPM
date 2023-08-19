@@ -9,8 +9,8 @@ public class ComponentConfiguration : IEntityTypeConfiguration<Component>
     public void Configure(EntityTypeBuilder<Component> builder)
     {
         builder.ToTable("components");
-        builder.HasKey(c => new { c.ComponentId, c.ProjectId });
-        builder.Property(c => c.ComponentId)
+        builder.HasKey(c => new { c.Id, c.ProjectId });
+        builder.Property(c => c.Id)
             .HasColumnName("componentid")
             .ValueGeneratedNever();
         builder.Property(c => c.ProjectId)

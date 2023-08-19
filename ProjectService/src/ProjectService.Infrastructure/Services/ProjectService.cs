@@ -21,11 +21,11 @@ public class ProjectServices : IProjectService
     {
         _context.Add(project);
         await _context.SaveChangesAsync();
-        return project.ProjectId;
+        return project.Id;
     }
     public async Task<bool> DeleteProjectById(Project project, CancellationToken cancellationToken)
     {
-        var ProjectExist =await GetProjectByIdAsync(project.ProjectId,cancellationToken);
+        var ProjectExist =await GetProjectByIdAsync(project.Id,cancellationToken);
         if(ProjectExist is null)
         {
             return false;
@@ -36,7 +36,7 @@ public class ProjectServices : IProjectService
 
     public async Task<Project>? GetProjectByIdAsync(Guid projectId, CancellationToken cancellationToken)
     {
-        return await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == projectId, cancellationToken);
+        return await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId, cancellationToken);
     }
 
     public async Task<Project>? GetProjectByNameAsync(string projectName, CancellationToken cancellationToken)
@@ -45,10 +45,10 @@ public class ProjectServices : IProjectService
     }
     public async Task UpdateProject(Project project, CancellationToken cancellationToken)
     {
-        var ProjectExist =await GetProjectByIdAsync(project.ProjectId,cancellationToken);
+        var ProjectExist =await GetProjectByIdAsync(project.Id,cancellationToken);
         if(ProjectExist is null)
         {
-            throw new NotFoundException(nameof(project),project.ProjectId);
+            throw new NotFoundException(nameof(project),project.Id);
         }
         _context.Update(project);
         await _context.SaveChangesAsync(cancellationToken);
@@ -76,7 +76,7 @@ public class ProjectServices : IProjectService
     {
         var orderMap = new Dictionary<string, Expression<Func<Project, object>>>
         {
-            ["projectid"] = p => p.ProjectId,
+            ["projectid"] = p => p.Id,
             ["projectName"] = p => p.ProjectDetails.Name,
             ["created"] = p => p.Created,
             ["projectstatus"] = p => p.ProjectStatus,

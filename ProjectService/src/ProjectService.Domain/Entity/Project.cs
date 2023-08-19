@@ -4,7 +4,6 @@ using ProjectService.Domain.Event;
 namespace ProjectService.Domain.Entity;
 public class Project : AuditableEntity
 {
-    public Guid ProjectId { get; private set; }
     public Details ProjectDetails { get; private set; }
     public Guid OwnerId { get; private set; }
     public ICollection<Component> Components { get; private set; } = new HashSet<Component>();
@@ -15,7 +14,7 @@ public class Project : AuditableEntity
 
     public Project(Details projectDetails, Guid ownerId, Guid workflowId)
     {
-        ProjectId = Guid.NewGuid();
+        Id = Guid.NewGuid();
         ProjectDetails = projectDetails;
         OwnerId = ownerId;
         Components = new List<Component>();
@@ -26,12 +25,18 @@ public class Project : AuditableEntity
     }
     public void AddComponent(Details componentDetails)
     {
+        try {
         var component = new Component(componentDetails);
         Components.Add(component);
+        }
+        catch(Exception ex)
+        {
+            throw;
+        }
     }
     public void RemoveComponent(Guid componentId)
     {
-        var component = Components.FirstOrDefault(c => c.ComponentId == componentId);
+        var component = Components.FirstOrDefault(c => c.Id == componentId);
         if (component != null)
         {
             Components.Remove(component);
@@ -40,20 +45,20 @@ public class Project : AuditableEntity
 
     public void AddUser(Guid userId, UserRole role)
     {
-        if (!ProjectUsers.Any(pu => pu.UserId == userId))
+        if (!ProjectUsers.Any(pu => pu.Id == userId))
         {
-            ProjectUsers.Add(new ProjectUser { UserId = userId, UserRole = role });
+            ProjectUsers.Add(new ProjectUser { Id = userId, UserRole = role });
         }
     }
     public void AddUsers(List<Guid> userIds)
     {
-        var existingUserIds = ProjectUsers.Select(pu => pu.UserId).ToHashSet();
+        var existingUserIds = ProjectUsers.Select(pu => pu.Id).ToHashSet();
 
         foreach (var userId in userIds)
         {
             if (!existingUserIds.Contains(userId))
             {
-                ProjectUsers.Add(new ProjectUser { UserId = userId, UserRole = UserRole.user });
+                ProjectUsers.Add(new ProjectUser { Id = userId, UserRole = UserRole.user });
             }
         }
     }
@@ -73,7 +78,7 @@ public class Project : AuditableEntity
 
     public void RemoveUser(Guid userId)
     {
-        var user = ProjectUsers.FirstOrDefault(pu => pu.UserId == userId);
+        var user = ProjectUsers.FirstOrDefault(pu => pu.Id == userId);
         if (user != null)
         {
             ProjectUsers.Remove(user);
@@ -93,7 +98,7 @@ public class Project : AuditableEntity
     }
     public void RemoveUsers(List<Guid> userIds)
     {
-        var usersToRemove = ProjectUsers.Where(pu => userIds.Contains(pu.UserId)).ToList();
+        var usersToRemove = ProjectUsers.Where(pu => userIds.Contains(pu.Id)).ToList();
 
         foreach (var user in usersToRemove)
         {

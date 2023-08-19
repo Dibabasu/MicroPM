@@ -23,6 +23,7 @@ public static class ConfigureServices
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
         services.AddTransient<IValidationService, ValidationService>();
 
+        services.AddSingleton<ETagService>();
         
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));

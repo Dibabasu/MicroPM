@@ -35,7 +35,7 @@ public class ProjectTests
         // Arrange
         var componentDetails = new Details(ProjectUtilites.ComponentName,ProjectUtilites.Componentdescription);
         _project.AddComponent(componentDetails);
-        var componentId = _project.Components.First().ComponentId;
+        var componentId = _project.Components.First().Id;
 
         // Act
         _project.RemoveComponent(componentId);
