@@ -31,3 +31,18 @@ jobs:
 
     - name: Test
       run: dotnet test ./ProjectService/ProjectService.sln --no-build -c Release --verbosity normal
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: ./ProjectService
+        push: true
+        tags: dibabasu/projectservice:latest
+        
+        
