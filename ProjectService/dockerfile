@@ -18,7 +18,7 @@ COPY ./src/ProjectService.Api/ ./src/ProjectService.Api/
 
 # run build over the API project
 WORKDIR "/src/ProjectService.Api/"
-RUN dotnet build "src/ProjectService.Api/ProjectService.Api.csproj" -c Release -o /app/build
+RUN dotnet build "ProjectService.Api.csproj" -c Release -o /app/build
 
 # Build runtime image.
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
