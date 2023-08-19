@@ -41,6 +41,6 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
-        context: ./ProjectService/src/ProjectService.Api
+        context: .
         push: true
         tags: dibabasu/projectservice:latest
