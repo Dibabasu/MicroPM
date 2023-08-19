@@ -9,8 +9,8 @@ public class ProjectUserConfiguration : IEntityTypeConfiguration<ProjectUser>
     public void Configure(EntityTypeBuilder<ProjectUser> builder)
     {
         builder.ToTable("projectusers");
-        builder.HasKey(pu => new { pu.UserId, pu.ProjectId });
-        builder.Property(pu => pu.UserId)
+        builder.HasKey(pu => new { pu.Id, pu.ProjectId });
+        builder.Property(pu => pu.Id)
             .HasColumnName("userid");
         builder.Property(pu => pu.ProjectId)
             .HasColumnName("projectid");
@@ -32,6 +32,6 @@ public class ProjectUserConfiguration : IEntityTypeConfiguration<ProjectUser>
             .WithMany(p => p.ProjectUsers)
             .HasForeignKey(pu => pu.ProjectId);
         builder.HasIndex(pu => pu.ProjectId).HasDatabaseName("idx_projectusers_projectid");
-        builder.HasIndex(pu => pu.UserId).HasDatabaseName("idx_projectusers_userid");
+        builder.HasIndex(pu => pu.Id).HasDatabaseName("idx_projectusers_userid");
     }
 }

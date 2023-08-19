@@ -5,15 +5,16 @@ using ProjectService.Application.Common.Errors;
 using OneOf;
 using ProjectService.Domain.Common;
 using Serilog;
+using ProjectService.Application.DTOs;
 
 namespace ProjectService.Application.Projects.Commands.CreateProject;
 
 public class CreateProjectCommand : IRequest<OneOf<Guid, ProjectServiceException>>
 {
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
+    public string ProjectName { get; set; } = string.Empty;
+    public string ProjectDescription { get; set; } = string.Empty;
     public string Owner { get; set; } = string.Empty;
-    public List<ComponentDto>? Components { get; set; }
+    public List<CreateComponentDTO>? Components { get; set; }
     public List<string>? UserGroup { get; set; }
     public List<string>? Users { get; set; }
     public string Workflow { get; set; } = string.Empty;
@@ -43,7 +44,7 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
         {
             var owner = await _validationService.ValidateUser(request.Owner);
             Project project = new(
-                projectDetails: new Details(request.Name, request.Description),
+                projectDetails: new Details(request.ProjectName, request.ProjectDescription),
                 ownerId: owner,
                 workflowId: await _validationService.ValidateWorkflow(request.Workflow));
             if (request.Admin != null)
@@ -78,13 +79,13 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
             {
                 foreach (var component in request.Components)
                 {
-                    project.AddComponent(new Details(component.ComponentDetails.Name,
-                        component.ComponentDetails.Name));
+                    project.AddComponent(new Details(component.ComponentName,
+                        component.ComponentDescription));
                 }
 
             }
             await _projectService.AddProject(project);
-            return project.ProjectId;
+            return project.Id;
         }
         catch(ProjectServiceException ex)
         {

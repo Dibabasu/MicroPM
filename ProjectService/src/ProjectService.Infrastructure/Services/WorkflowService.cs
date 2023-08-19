@@ -8,11 +8,9 @@ namespace ProjectService.Infrastructure.Services
 {
     public class WorkflowService : IWorkflowService
     {
-        
-
-        public Task<Guid> GetWorkflowByNameAsync(string Workflowname, CancellationToken cancellationToken)
+        public async Task<Guid> GetWorkflowByNameAsync(string Workflowname, CancellationToken cancellationToken)
         {
-            return Task.FromResult(Guid.NewGuid());
+            return Guid.NewGuid();
         }
     }
 }

@@ -3,6 +3,7 @@ using ProjectService.Application.Common.Errors;
 using OneOf;
 using ProjectService.Application.UnitTest.CreateProject_Test.Utility;
 using ProjectService.Domain.Entity;
+using ProjectService.Application.DTOs;
 
 namespace ProjectService.Application.Projects.Commands.CreateProject;
 
@@ -22,7 +23,7 @@ public class CreateProjectCommandHandlerTests
     [Fact]
     public async Task Handle_ValidRequest_ReturnsProjectId()
     {
-        var command = new CreateProjectCommand { Name = "Test", Description = "Test", Owner = "Test" };
+        var command = new CreateProjectCommand { ProjectName = "Test", ProjectDescription = "Test", Owner = "Test" };
         var result = await _handler.Handle(command, new CancellationToken());
         Assert.IsType<OneOf<Guid, ProjectServiceException>>(result);
         Assert.True(result.IsT0);
@@ -105,19 +106,19 @@ public class CreateProjectCommandHandlerTests
             name: "Test",
             description: "Test",
             owner: "Test",
-            components: new List<ComponentDto> { new ComponentDto { ComponentDetails = new Details("Component1", "Description") } });
+            components: new List<CreateComponentDTO> { new CreateComponentDTO("Component1", "Description") });
 
         var result = await _handler.Handle(command, new CancellationToken());
         Assert.IsType<OneOf<Guid, ProjectServiceException>>(result);
         Assert.True(result.IsT0);
     }
 
-    private static CreateProjectCommand CreateCommand(string name, string description, string owner, string workflow = "", List<string> admin = null, List<string> users = null, List<string> userGroup = null, List<ComponentDto> components = null)
+    private static CreateProjectCommand CreateCommand(string name, string description, string owner, string workflow = "", List<string> admin = null, List<string> users = null, List<string> userGroup = null, List<CreateComponentDTO> components = null)
     {
         return new CreateProjectCommand
         {
-            Name = name,
-            Description = description,
+            ProjectName = name,
+            ProjectDescription = description,
             Owner = owner,
             Workflow = workflow,
             Admin = admin,

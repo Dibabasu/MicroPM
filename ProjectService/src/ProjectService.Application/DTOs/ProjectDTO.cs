@@ -17,7 +17,7 @@ public class ProjectDto : IMapFrom<Project>
     public void Mapping(TypeAdapterConfig config)
     {
         config.NewConfig<Project, ProjectDto>()
-            .Map(dest => dest.ProjectId, src => src.ProjectId)
+            .Map(dest => dest.ProjectId, src => src.Id)
             .Map(dest => dest.ProjectDetails, src => src.ProjectDetails)
             .Map(dest => dest.OwnerId, src => src.OwnerId)
             .Map(dest => dest.Components, src => src.Components)

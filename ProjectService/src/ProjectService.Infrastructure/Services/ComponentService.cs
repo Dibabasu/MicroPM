@@ -16,14 +16,14 @@ public class ComponentService : IComponentService
 
     public async Task<Component> GetComponentByIdAsync(Guid componentId, CancellationToken cancellationToken)
     {
-        return await _context.Components.FirstOrDefaultAsync(x => x.ComponentId == componentId, cancellationToken);
+        return await _context.Components.FirstOrDefaultAsync(x => x.Id == componentId, cancellationToken);
     }
 
     public async Task<Guid> GetComponentByNameAsync(string componentName, Guid projectId, CancellationToken cancellationToken)
     {
         return await _context.Components.Where
         (x => x.ProjectId == projectId && x.ComponentDetails.Name == componentName)
-        .Select(x => x.ComponentId)
+        .Select(x => x.Id)
         .FirstOrDefaultAsync();
 
     }
@@ -62,6 +62,6 @@ public class ComponentService : IComponentService
     {
         _context.Update(component);
         await _context.SaveChangesAsync(cancellationToken);
-        return component.ComponentId;
+        return component.Id;
     }
 }

@@ -8,14 +8,25 @@ namespace ProjectService.Infrastructure.Services
 {
     public class UserGroupService : IUserGroupService
     {
-        public Task<List<Guid>> GetUsersByIDAsync(Guid Id, CancellationToken cancellationToken)
+        public async Task<List<Guid>> GetUsersByIDAsync(Guid Id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+           List<Guid> newGuids = new()
+            {
+                Guid.NewGuid(),
+                Guid.NewGuid()
+            };
+            return newGuids;
         }
 
-        public Task<List<Guid>> GetUsersByNameAsync(string userGroupNames, CancellationToken cancellationToken)
+        public async Task<List<Guid>> GetUsersByNameAsync(string userGroupNames, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            ///retrun a list of new guids
+            List<Guid> newGuids = new()
+            {
+                Guid.NewGuid(),
+                Guid.NewGuid()
+            };
+            return newGuids;
         }
     }
 }

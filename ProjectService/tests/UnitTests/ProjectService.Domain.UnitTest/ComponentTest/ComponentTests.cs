@@ -12,7 +12,7 @@ public class ComponentTests
         var component = new Component(details);
 
         // Assert
-        Assert.NotNull(component.ComponentId);
+        Assert.NotNull(component.Id);
         Assert.Equal(details, component.ComponentDetails);
     }
 

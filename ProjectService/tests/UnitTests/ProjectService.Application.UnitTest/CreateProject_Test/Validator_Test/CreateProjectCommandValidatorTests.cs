@@ -39,7 +39,7 @@ public class CreateProjectCommandValidatorTests
             owner: CreateProjectUtility.Owner
         );
         var result = await _validator.TestValidateAsync(command);
-        result.ShouldHaveValidationErrorFor(x => x.Description);
+        result.ShouldHaveValidationErrorFor(x => x.ProjectDescription);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class CreateProjectCommandValidatorTests
             owner: CreateProjectUtility.Owner
         );
         var result = await _validator.TestValidateAsync(command);
-        result.ShouldHaveValidationErrorFor(x => x.Name);
+        result.ShouldHaveValidationErrorFor(x => x.ProjectName);
     }
 
     [Fact]
@@ -79,10 +79,10 @@ public class CreateProjectCommandValidatorTests
         );
 
         var projectDetails = new Details(CreateProjectUtility.ProjectName, CreateProjectUtility.ProjectDescription);
-        _projectService.GetProjectByNameAsync(command.Name,
+        _projectService.GetProjectByNameAsync(command.ProjectName,
             Arg.Any<CancellationToken>()).Returns(new Project(projectDetails, Guid.NewGuid(), Guid.NewGuid()));
         var result = await _validator.TestValidateAsync(command);
-        result.ShouldHaveValidationErrorFor(x => x.Name);
+        result.ShouldHaveValidationErrorFor(x => x.ProjectName);
     }
     [Fact]
     public async Task Validate_NullName_ReturnsFailure()
@@ -95,7 +95,7 @@ public class CreateProjectCommandValidatorTests
             owner: CreateProjectUtility.Owner
         );
         var result = await _validator.TestValidateAsync(command);
-        result.ShouldHaveValidationErrorFor(x => x.Name);
+        result.ShouldHaveValidationErrorFor(x => x.ProjectName);
     }
 
     [Fact]
@@ -108,7 +108,7 @@ public class CreateProjectCommandValidatorTests
             owner: CreateProjectUtility.Owner
         );
         var result = await _validator.TestValidateAsync(command);
-        result.ShouldHaveValidationErrorFor(x => x.Description);
+        result.ShouldHaveValidationErrorFor(x => x.ProjectDescription);
     }
 
     [Fact]

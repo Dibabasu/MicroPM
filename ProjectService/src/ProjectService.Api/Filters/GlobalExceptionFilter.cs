@@ -21,7 +21,7 @@ public class GlobalExceptionFilter : IExceptionFilter
                 problemDetails.Status = StatusCodes.Status400BadRequest;
                 problemDetails.Detail = string.Join(", ", validationException.Errors.Select(e =>
                 {
-                    return e.Value;
+                    return e.Value[0].ToString();
                 }));
                 break;
 
