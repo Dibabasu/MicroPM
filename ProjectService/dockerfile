@@ -9,7 +9,7 @@ WORKDIR /src
 COPY ["./src/ProjectService.Domain/ProjectService.Domain.csproj", "src/ProjectService.Domain/"]
 COPY ["./src/ProjectService.Application/ProjectService.Application.csproj", "src/ProjectService.Application/"]
 COPY ["./src/ProjectService.Infrastructure/ProjectService.Infrastructure.csproj", "src/ProjectService.InfrastructureCore/"]
-COPY ["./src/ProjectService.Api/ProjectService.Api.csproj ", "src/ProjectService.Api/"]
+COPY ["./src/ProjectService.Api/ProjectService.Api.csproj", "src/ProjectService.Api/"]
 
 
 # run restore over API project - this pulls restore over the dependent projects as well
