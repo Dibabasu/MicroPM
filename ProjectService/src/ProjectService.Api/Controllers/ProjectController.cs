@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectService.Api.Common.Handlers;
+using ProjectService.Api.Filters;
 using ProjectService.Application.Projects.Commands.CreateProject;
 using ProjectService.Application.Projects.Commands.DeleteProject;
 using ProjectService.Application.Projects.Commands.UpdateAdminsToProject;
@@ -17,7 +18,9 @@ namespace ProjectService.Api.Controllers
     [Route("api/[controller]")]
     public class ProjectController : ApiControllerBase
     {
+        
         [HttpGet("FindProject")]
+        [TypeFilter(typeof(ETagFilter))]
         public async Task<IActionResult> FindProject([FromQuery] FindProjectQuery query)
         {
             var result = await Mediator.Send(query);
@@ -41,25 +44,33 @@ namespace ProjectService.Api.Controllers
             var result = await Mediator.Send(command);
             return ResultHandler.Handle(result);
         }
+        
         [HttpPut("UpdateComponentToProject")]
+        [TypeFilter(typeof(ETagFilter))]
         public async Task<IActionResult> UpdateComponentToProject([FromBody] UpdateComponentToProjectCommand command)
         {
             var result = await Mediator.Send(command);
             return ResultHandler.Handle(result);
         }
+        
         [HttpPut("UpdateAdminsToProject")]
+        [TypeFilter(typeof(ETagFilter))]
         public async Task<IActionResult> UpdateAdminsToProject([FromBody] UpdateAdminsToProjectCommand command)
         {
             var result = await Mediator.Send(command);
             return ResultHandler.Handle(result);
         }
+        
         [HttpPut("UpdateProjectDetails")]
+        [TypeFilter(typeof(ETagFilter))]
         public async Task<IActionResult> UpdateProjectDetails([FromBody] UpdateProjectDetailsCommand command)
         {
             var result = await Mediator.Send(command);
             return ResultHandler.Handle(result);
         }
+        
         [HttpPut("UpdateUserGroupsToProject")]
+        [TypeFilter(typeof(ETagFilter))]
         public async Task<IActionResult> UpdateUserGroupsToProject([FromBody] UpdateUserGroupsToProjectCommand command)
         {
             var result = await Mediator.Send(command);

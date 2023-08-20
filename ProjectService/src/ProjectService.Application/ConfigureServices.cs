@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectService.Application.Common.Behaviours;
 using ProjectService.Application.Common.Interfaces;
+using ProjectService.Application.Common.Mappings;
 using ProjectService.Application.Common.Services;
 using Serilog;
 
@@ -18,6 +19,9 @@ public static class ConfigureServices
         .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} <s:{SourceContext}> {Properties:j}{NewLine}{Exception}") // Log to the console
         .CreateLogger();
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
+        
+        MappingConfig.RegisterMappings();
+        services.AddMapper();
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));

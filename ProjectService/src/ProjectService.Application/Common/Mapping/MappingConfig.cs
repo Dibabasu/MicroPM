@@ -1,11 +1,11 @@
 using Mapster;
 using System.Reflection;
+
 namespace ProjectService.Application.Common.Mappings;
-public class MappingConfig
+public static class MappingConfig
 {
     public static void RegisterMappings()
     {
-        var config = new TypeAdapterConfig();
         var assembly = Assembly.GetExecutingAssembly();
 
         foreach (var type in assembly.GetExportedTypes())
@@ -13,7 +13,7 @@ public class MappingConfig
             if (type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IMapFrom<>)))
             {
                 dynamic instance = Activator.CreateInstance(type);
-                instance.Mapping(config);
+                instance.Mapping(TypeAdapterConfig.GlobalSettings);
             }
         }
 

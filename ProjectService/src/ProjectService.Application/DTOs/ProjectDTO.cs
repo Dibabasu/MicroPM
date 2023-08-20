@@ -17,12 +17,14 @@ public class ProjectDto : IMapFrom<Project>
     public void Mapping(TypeAdapterConfig config)
     {
         config.NewConfig<Project, ProjectDto>()
-            .Map(dest => dest.ProjectId, src => src.Id)
+            .Map(dest => dest.ProjectId, src => src.Id, p => true)
             .Map(dest => dest.ProjectDetails, src => src.ProjectDetails)
             .Map(dest => dest.OwnerId, src => src.OwnerId)
             .Map(dest => dest.Components, src => src.Components)
             .Map(dest => dest.WorkflowId, src => src.WorkflowId)
             .Map(dest => dest.ProjectUsers, src => src.ProjectUsers)
             .Map(dest => dest.ProjectStatus, src => src.ProjectStatus);
+
+        
     }
 }
