@@ -25,11 +25,12 @@ public class Project : AuditableEntity
     }
     public void AddComponent(Details componentDetails)
     {
-        try {
-        var component = new Component(componentDetails);
-        Components.Add(component);
+        try
+        {
+            var component = new Component(componentDetails);
+            Components.Add(component);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             throw;
         }
@@ -90,7 +91,7 @@ public class Project : AuditableEntity
     }
     public void UpdateDetails(Details projectdetails)
     {
-        ProjectDetails= projectdetails;
+        ProjectDetails = projectdetails;
     }
     public void UpdateWorkFlow(Guid workflowId)
     {
