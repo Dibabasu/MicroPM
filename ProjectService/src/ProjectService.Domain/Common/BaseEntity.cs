@@ -4,9 +4,9 @@ namespace ProjectService.Domain.Common;
 public abstract class BaseEntity
 {
     private readonly List<BaseEvent> _domainEvents = new();
-    public Guid Id { get; set; }
+    public virtual Guid Id { get; set; }
     [NotMapped]
-    public IReadOnlyCollection<BaseEvent> DomainEvents => _domainEvents.AsReadOnly();
+    public virtual IReadOnlyCollection<BaseEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     public void AddDomainEvent(BaseEvent domainEvent)
     {

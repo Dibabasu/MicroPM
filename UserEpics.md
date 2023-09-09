@@ -6,6 +6,7 @@
 - Authenticate users based on provided credentials.
 - Manage user profiles, including updating user details and preferences.
 - Handle user roles and permissions for authorization.
+- This service is being implmented using AWS Cognito, lambda and API Gateway.
 
 ## Project Management (Project Service)
 **Operations:**
