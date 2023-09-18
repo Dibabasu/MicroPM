@@ -1,4 +1,6 @@
 using MediatR;
+using Microsoft.Extensions.Configuration;
+using ProjectService.Application.Common.Errors;
 using ProjectService.Application.Common.MessagePublisher.Interfaces;
 using ProjectService.Domain.Event;
 using Serilog;
@@ -9,18 +11,23 @@ public class ProjectCreatedEventHandler : INotificationHandler<ProjectCreatedEve
 {
     private readonly ILogger _logger;
     private readonly IEnumerable<IMessagePublisher> _messagePublishers;
-
-    public ProjectCreatedEventHandler(IEnumerable<IMessagePublisher> messagePublishers)
+    private readonly string _topicname;
+    public ProjectCreatedEventHandler(IEnumerable<IMessagePublisher> messagePublishers, IConfiguration configuration)
     {
         _logger = Log.ForContext<ProjectCreatedEventHandler>();
         _messagePublishers = messagePublishers;
+        _topicname = configuration.GetSection("Topics:ProjectCreated").Value ?? string.Empty;
     }
 
     public async Task Handle(ProjectCreatedEvent notification, CancellationToken cancellationToken)
     {
-        foreach (var publisher in _messagePublishers)
+        if (!String.IsNullOrEmpty(_topicname))
         {
-            await publisher.Publish(notification);
+            foreach (var publisher in _messagePublishers)
+            {
+                await publisher.Publish(notification, _topicname);
+            }
         }
+        throw new EmptyOrNullException("Topic not setup");
     }
 }

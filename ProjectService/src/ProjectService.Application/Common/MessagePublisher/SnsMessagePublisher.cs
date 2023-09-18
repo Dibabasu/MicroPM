@@ -22,11 +22,11 @@ public class SnsMessagePublisher : IMessagePublisher
         _sns = sns;
         _logger = Log.ForContext<SnsMessagePublisher>();
     }
-    private async Task<string> GetTopicArnAsync()
+    private async Task<string> GetTopicArnAsync(string topicName)
     {
         try
         {
-            var queueUrlResponse = await _sns.FindTopicAsync(_topicSettings.Value.Name);
+            var queueUrlResponse = await _sns.FindTopicAsync(topicName);
             _topicArn = queueUrlResponse.TopicArn;
             return _topicArn;
         }
@@ -36,11 +36,11 @@ public class SnsMessagePublisher : IMessagePublisher
             throw new Exception("Failed to find topic url", ex);
         }
     }
-    public async Task Publish<T>(T notification)
+    public async Task Publish<T>(T notification,string topicName)
     {
         try
         {
-            var topicArn = await GetTopicArnAsync();
+            var topicArn = await GetTopicArnAsync(topicName);
 
             var sendMessageRequest = new PublishRequest
             {

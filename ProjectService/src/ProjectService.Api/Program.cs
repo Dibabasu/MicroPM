@@ -11,12 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
         options =>
         options.Filters.Add(new GlobalExceptionFilter())
     );
-    builder.Services.AddApplicationServices();
+    builder.Services.AddApplicationServices(builder.Configuration);
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddHealthChecks();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-}
+} 
 
 var app = builder.Build();
 {

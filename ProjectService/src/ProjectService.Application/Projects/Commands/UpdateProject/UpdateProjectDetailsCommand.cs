@@ -44,4 +44,4 @@ public class UpdateProjectDetailsCommandHandler : IRequestHandler<UpdateProjectD
             return ex;
         }
     }
-}
+} 
