@@ -15,10 +15,10 @@ public class CreateProjectCommandValidator : AbstractValidator<CreateProjectComm
              .MustAsync(async (name, cancellation) => !await DoesProjectAlreadyExist(name, cancellation))
              .WithMessage("Project name already exists.");
 
-        RuleFor(x => x.Owner).NotEmpty().When(x => !string.IsNullOrEmpty(x.Owner))
-         .WithMessage("Owner field cannot be empty.")
-         .Must(user => !user.Contains(' '))
-         .WithMessage("Owner field cannot contain white spaces.");
+        RuleFor(x => x.Owner).NotEmpty().WithMessage("Owner field cannot be empty.");
+        RuleFor(x => x.Owner)
+            .Must(owner => string.IsNullOrWhiteSpace(owner) || !owner.Contains(' '))
+            .WithMessage("Owner field cannot contain white spaces if it has a value.");
     }
     private async Task<bool> DoesProjectAlreadyExist(string projectName, CancellationToken ct)
     {
