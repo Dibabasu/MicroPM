@@ -11,7 +11,7 @@ public class BaseEntityTests
 
             // Assert
             Assert.Single(project.DomainEvents);
-            Assert.IsType<ProjectCreatedEvent>(project.DomainEvents.First());
+            Assert.IsType<ProjectSubmittedForApprovalEvent>(project.DomainEvents.First());
         }
 
         [Fact]
