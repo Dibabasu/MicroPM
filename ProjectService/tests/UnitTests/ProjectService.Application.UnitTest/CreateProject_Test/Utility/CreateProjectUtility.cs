@@ -5,7 +5,7 @@ public static class CreateProjectUtility
 {
     public const string ProjectName = "Project1";
     public const string ProjectDescription = "Project 1 Description";
-    public const string Owner = "Onwer 1";
+    public const string Owner = "Onwer1";
     public static CreateProjectCommand CreateCommand(string name, string description, string owner)
     {
         return new CreateProjectCommand

@@ -21,7 +21,7 @@ public class Project : AuditableEntity
         WorkflowId = workflowId;
         ProjectUsers = new List<ProjectUser>();
 
-        AddDomainEvent(new ProjectCreatedEvent(this));
+        AddDomainEvent(new ProjectSubmittedForApprovalEvent(this));
     }
     public void AddComponent(Details componentDetails)
     {
@@ -109,6 +109,10 @@ public class Project : AuditableEntity
     public void ChangeStatus(ProjectStatus newStatus)
     {
         ProjectStatus = newStatus;
+        if (newStatus == ProjectStatus.approved)
+        {
+            AddDomainEvent(new ProjectCreatedEvent(this));
+        }
     }
     private Project() { }
 }
