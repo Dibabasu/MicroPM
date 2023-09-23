@@ -34,6 +34,7 @@ public class Project
     public ProjectDetails ProjectDetails { get; set; }
     public string OwnerId { get; set; }
     public string Id { get; set; } = string.Empty;
+    public int ProjectStatus { get; set; }
 }
 
 public class ProjectDetails

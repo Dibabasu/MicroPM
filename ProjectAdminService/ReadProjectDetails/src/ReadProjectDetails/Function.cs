@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.Lambda.Annotations;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 
@@ -33,6 +34,7 @@ public class Function
     /// <param name="evnt"></param>
     /// <param name="context"></param>
     /// <returns></returns>
+    [LambdaFunction]
     public async Task FunctionHandler(SQSEvent evnt, ILambdaContext context)
     {
         foreach (var message in evnt.Records)
@@ -59,6 +61,7 @@ public class Function
             ProjectDescription = projectMessage.Project.ProjectDetails.Description,
             OwnerId = projectMessage.Project.OwnerId,
             ProjectId = projectMessage.Project.Id,
+            ProjectStatus= projectMessage.Project.ProjectStatus,
             Message = message.Body
         };
         context.Logger.LogInformation($"Storing data to dynamo db table Id : {message.MessageId}");
@@ -88,4 +91,7 @@ public class DynamoDbItem
     public string OwnerId { get; set; } = string.Empty;
     [DynamoDBProperty]
     public string ProjectId { get; set; } = string.Empty;
+    [DynamoDBProperty]
+    public int ProjectStatus{get;set;}
+
 }

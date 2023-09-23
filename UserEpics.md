@@ -14,6 +14,12 @@
 - Retrieve project details, including tasks and comments associated with the project.
 - Update project information.
 - Delete projects when needed.
+- This service uses dotnet 6, Web Api, SQL Server, Docker & ECS.
+
+## Project Admin service
+**Operations:**
+- Approve or Reject a newly created project.
+- 
 
 ## Task Management (Task Service)
 **Operations:**

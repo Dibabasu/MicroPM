@@ -10,12 +10,17 @@ namespace UserService;
 public class Function
 {
     private readonly IAmazonCognitoIdentityProvider _client;
+    private readonly string _userPoolId;
 
-    public Function() : this(new AmazonCognitoIdentityProviderClient(RegionEndpoint.USEast1)) { }
+    public Function() : this(new AmazonCognitoIdentityProviderClient(RegionEndpoint.USEast1)) {
+
+
+     }
 
     public Function(IAmazonCognitoIdentityProvider client)
     {
         _client = client;
+        _userPoolId = System.Environment.GetEnvironmentVariable("User_Pool_Id")!;
     }
 
     /// <summary>
@@ -28,7 +33,7 @@ public class Function
     {
         var request = new ListUsersRequest
         {
-            UserPoolId = "us-east-1_YwI4ucIqm"
+            UserPoolId = _userPoolId
         };
 
         var response = await _client.ListUsersAsync(request);
