@@ -1,22 +1,18 @@
-using System.Net.Mime;
-using System.Xml;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using ProjectService.Api.Filters;
+using ProjectService.Api.Common;
 using ProjectService.Application;
 using ProjectService.Infrastructure;
 
+
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddControllers(
-        options =>
-        options.Filters.Add(new GlobalExceptionFilter())
-    );
+    builder.Services.AddApiServices(builder.Configuration);
     builder.Services.AddApplicationServices(builder.Configuration);
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddHealthChecks();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-} 
+}
 
 var app = builder.Build();
 {
@@ -29,6 +25,8 @@ var app = builder.Build();
 
     app.UseRouting();
 
+    app.UseAuthentication();
+    app.UseAuthorization();
 
 
     app.UseEndpoints(endpoints =>

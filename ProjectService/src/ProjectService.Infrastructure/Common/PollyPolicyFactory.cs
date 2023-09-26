@@ -22,7 +22,7 @@ namespace ProjectService.Infrastructure.Common
                     var content = msg.Content.ReadAsStringAsync().Result;
                     return content.Contains("\"error\":");
                 })
-                .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
         }
     }
     public static class HttpContentExtensions

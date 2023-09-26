@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProjectService.Api.Common.Interfaces;
 using ProjectService.Application.Common.Interfaces;
 
 namespace ProjectService.Api.Controllers;
@@ -8,18 +10,28 @@ namespace ProjectService.Api.Controllers;
 public class UserController : ApiControllerBase
 {
     private readonly IUserService _userService;
-
-    public UserController(IUserService userService)
+    private readonly IUserGroupService _usergroupService;
+    private readonly ICustomClaimService _claimService;
+    public UserController(IUserService userService, ICustomClaimService claimService, IUserGroupService usergroupService)
     {
         _userService = userService;
+        _claimService = claimService;
+        _usergroupService = usergroupService;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetUserByuserName([FromQuery] string username)
+    [Authorize]
+    [HttpGet("GetUserByuserName")]
+    public async Task<IActionResult> GetUserByuserName()
     {
-        var users = await _userService.GetUserIdByUserNameAsync(username,cancellationToken: Request.HttpContext.RequestAborted);
+        var username = _claimService.GetUser();
+        var users = await _userService.GetUserIdByUserNameAsync(username, cancellationToken: Request.HttpContext.RequestAborted);
+        return Ok(users);
+    }
+    [HttpGet("GetUserByusersGroupName")]
+    public async Task<IActionResult> GetUserByusersGroupName(string groupName)
+    {
+        var users = await _usergroupService.GetUsersByNameAsync(groupName, cancellationToken: Request.HttpContext.RequestAborted);
         return Ok(users);
     }
 }
 
-    

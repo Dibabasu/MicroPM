@@ -19,12 +19,12 @@ namespace ProjectService.Infrastructure.Services
 
         public async Task<Guid> GetUserIdByUserNameAsync(string username, CancellationToken cancellationToken)
         {
-            var response = await _userServiceClient.GetUser(username, cancellationToken);
-            if (String.IsNullOrEmpty(response.Sid))
+            var user = await _userServiceClient.GetUser(username, cancellationToken);
+            if (String.IsNullOrEmpty(user.Sid))
             {
                 throw new NotFoundException(username);
             }
-            return Guid.Parse(response.Sid);
+            return Guid.Parse(user.Sid);
         }
     }
 }
