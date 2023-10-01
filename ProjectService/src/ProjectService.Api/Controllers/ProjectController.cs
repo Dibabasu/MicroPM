@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectService.Api.Common.Handlers;
 using ProjectService.Api.Filters;
@@ -32,6 +33,7 @@ public class ProjectController : ApiControllerBase
         var result = await Mediator.Send(query);
         return ResultHandler.Handle(result);
     }
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create(CreateProjectCommand command)
     {

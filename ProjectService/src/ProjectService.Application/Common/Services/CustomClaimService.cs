@@ -18,7 +18,7 @@ public class CustomClaimService : ICustomClaimService
 
         if (_httpContextAccessor != null)
         {
-            result = _httpContextAccessor!.HttpContext!.User.FindFirst("cognito:username")?.Value;
+            result = _httpContextAccessor!.HttpContext!.User.FindFirst("username")?.Value;
         }
         return result;
     }

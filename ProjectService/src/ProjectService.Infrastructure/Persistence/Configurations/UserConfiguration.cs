@@ -10,9 +10,9 @@ public class ProjectUserConfiguration : IEntityTypeConfiguration<ProjectUser>
     {
         builder.ToTable("projectusers");
         builder.HasKey(pu => new { pu.Id, pu.ProjectId });
-        builder.Property(pu => pu.Id)
-            .HasColumnName("projectuserid")
-            .ValueGeneratedNever();
+        builder.Property(c => c.Id)
+            .HasColumnName("projectusersId")
+            .ValueGeneratedOnAdd();
         builder.Property(pu=>pu.UserName)
                 .HasColumnName("username")
                 .HasMaxLength(50)
@@ -36,6 +36,7 @@ public class ProjectUserConfiguration : IEntityTypeConfiguration<ProjectUser>
         builder.HasOne(pu => pu.Project)
             .WithMany(p => p.ProjectUsers)
             .HasForeignKey(pu => pu.ProjectId);
+
         builder.HasIndex(pu => pu.ProjectId).HasDatabaseName("idx_projectusers_projectid");
         builder.HasIndex(pu => pu.Id).HasDatabaseName("idx_projectusers_userid");
     }
