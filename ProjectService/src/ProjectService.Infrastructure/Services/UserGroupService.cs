@@ -1,4 +1,4 @@
-using Amazon.SimpleNotificationService.Model;
+using ProjectService.Application.Common.Errors;
 using ProjectService.Application.Common.Interfaces;
 using ProjectService.Infrastructure.HttpClients;
 
@@ -12,12 +12,12 @@ namespace ProjectService.Infrastructure.Services
         {
             _usergroupServiceClient = userGroupServiceClient;
         }
-        public async Task<List<Guid>> GetUsersByNameAsync(string userGroupNames, CancellationToken cancellationToken)
+        public async Task<List<string>> GetUsersByNameAsync(string userGroupNames, CancellationToken cancellationToken)
         {
             var users = await _usergroupServiceClient.GetUsersByGroup(userGroupNames, cancellationToken)
             ?? throw new NotFoundException(userGroupNames);
 
-            return users.Select(user => Guid.Parse(user.Sid)).ToList();
+            return users.Select(user => user.UserName).ToList();
         }
     }
 }

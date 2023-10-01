@@ -35,8 +35,8 @@ public class UpdateAdminsToProjectCommandHandler
             {
                 foreach (var userName in request.Admins)
                 {
-                    Guid userId = await _userService.GetUserIdByUserNameAsync(userName, cancellationToken);
-                    if (userId == Guid.Empty)
+                    string userId = await _userService.GetUserIdByUserNameAsync(userName, cancellationToken);
+                    if (userId == string.Empty)
                     {
                         throw new NotFoundException("userName", userName);
                     }

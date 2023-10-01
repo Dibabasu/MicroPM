@@ -34,7 +34,7 @@ public class GetProjectsQueryHandlerTests
         var auditableEntitySaveChangesInterceptor = new AuditableEntitySaveChangesInterceptor(mockDateTime,_claimService);
 
         _context = new ProjectServiceDbContext(options, auditableEntitySaveChangesInterceptor, mockMediator);
-        _context.Projects.Add(new Project(new Details("Test", "Test"), Guid.NewGuid(), Guid.NewGuid()));
+        _context.Projects.Add(new Project(new Details("Test", "Test"), Guid.NewGuid().ToString(), Guid.NewGuid()));
         _context.SaveChanges();
 
         _projectService = new ProjectServices(_context); // Use real service with InMemory database
@@ -60,7 +60,7 @@ public class GetProjectsQueryHandlerTests
             PageNumber = 1,
             PageSize = 10,
             Status = Arg.Any<ProjectStatus?>(),
-            OwnerId = new Guid(),
+            OwnerId = new Guid().ToString(),
             FromDate = DateTime.UtcNow.AddDays(7),
             ToDate = Arg.Any<DateTime?>(),
             OrderBy = Arg.Any<string>()

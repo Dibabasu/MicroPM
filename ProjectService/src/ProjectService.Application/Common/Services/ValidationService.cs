@@ -1,9 +1,5 @@
 using ProjectService.Application.Common.Errors;
 using ProjectService.Application.Common.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ProjectService.Application.Common.Services
 {
@@ -22,14 +18,24 @@ namespace ProjectService.Application.Common.Services
             _userService = userService;
         }
 
-        private async ValueTask<Guid> ValidateEntity(string entityName, Func<string, CancellationToken, Task<Guid>> getEntityFunc)
+        private async ValueTask<Guid> ValidateEntity(
+            string entityName,
+            Func<string, CancellationToken, Task<Guid>> getEntityFunc)
         {
             CancellationToken cancellationToken = new();
             var entityId = await getEntityFunc(entityName, cancellationToken).ConfigureAwait(false);
             return entityId == Guid.Empty ? throw new NotFoundException(entityName) : entityId;
         }
+        private async ValueTask<string> ValidateEntity(
+            string entityName,
+            Func<string, CancellationToken, Task<string>> getEntityFunc)
+        {
+            CancellationToken cancellationToken = new();
+            var entityId = await getEntityFunc(entityName, cancellationToken).ConfigureAwait(false);
+            return entityId == string.Empty ? throw new NotFoundException(entityName) : entityId;
+        }
 
-        public ValueTask<Guid> ValidateUser(string ownerName)
+        public ValueTask<string> ValidateUser(string ownerName)
         {
             return ValidateEntity(ownerName, _userService.GetUserIdByUserNameAsync);
         }
@@ -39,7 +45,7 @@ namespace ProjectService.Application.Common.Services
             return ValidateEntity(workflowName, _workflowService.GetWorkflowByNameAsync);
         }
 
-        public async ValueTask<List<Guid>> ValidateUserGroup(string userGroupName)
+        public async ValueTask<List<string>> ValidateUserGroup(string userGroupName)
         {
             CancellationToken cancellationToken = new();
             var users = await _userGroupService.GetUsersByNameAsync(userGroupName, cancellationToken);

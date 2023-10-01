@@ -34,7 +34,7 @@ public class UpdateUserGroupsToProjectCommandHandler : IRequestHandler<UpdateUse
             {
                 foreach (var UserGroupNames in request.UserGroupNames)
                 {
-                    List<Guid> UserIds = await _groupService.GetUsersByNameAsync(UserGroupNames,cancellationToken);
+                    List<string> UserIds = await _groupService.GetUsersByNameAsync(UserGroupNames,cancellationToken);
                     if (request.RequestType == RequestType.add)
                     {
                         project.AddUsers(UserIds);

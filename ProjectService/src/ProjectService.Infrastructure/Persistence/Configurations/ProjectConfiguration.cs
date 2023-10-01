@@ -33,7 +33,8 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .HasColumnName("projectstatus")
             .HasMaxLength(20);
         builder.Property(p => p.OwnerId)
-            .HasColumnName("ownerid");
+            .HasColumnName("ownerid")
+            .HasMaxLength(50);
         builder.Property(p => p.Created)
             .HasColumnName("created")
             .HasColumnType("datetime2");
@@ -53,9 +54,9 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.HasMany(p => p.ProjectUsers)
             .WithOne(pu => pu.Project)
             .HasForeignKey(pu => pu.ProjectId);
-            
+
         //indexes
-       // builder.HasIndex(p => p.Details.Name).HasDatabaseName("idx_projects_projectname");
+        // builder.HasIndex(p => p.Details.Name).HasDatabaseName("idx_projects_projectname");
         builder.HasIndex(p => p.WorkflowId).HasDatabaseName("idx_projects_workflowid");
         builder.HasIndex(p => p.ProjectStatus).HasDatabaseName("idx_projects_projectstatus");
     }

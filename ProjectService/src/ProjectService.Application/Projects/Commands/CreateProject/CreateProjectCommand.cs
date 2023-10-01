@@ -87,10 +87,10 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
             await _projectService.AddProject(project);
             return project.Id;
         }
-        catch(ProjectServiceException ex)
+        catch (ProjectServiceException ex)
         {
             return ex;
         }
-        
+
     }
 }

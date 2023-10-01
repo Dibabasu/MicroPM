@@ -11,7 +11,12 @@ public class ProjectUserConfiguration : IEntityTypeConfiguration<ProjectUser>
         builder.ToTable("projectusers");
         builder.HasKey(pu => new { pu.Id, pu.ProjectId });
         builder.Property(pu => pu.Id)
-            .HasColumnName("userid");
+            .HasColumnName("projectuserid")
+            .ValueGeneratedNever();
+        builder.Property(pu=>pu.UserName)
+                .HasColumnName("username")
+                .HasMaxLength(50)
+                .IsRequired();
         builder.Property(pu => pu.ProjectId)
             .HasColumnName("projectid");
         builder.Property(pu => pu.UserRole)
@@ -24,10 +29,10 @@ public class ProjectUserConfiguration : IEntityTypeConfiguration<ProjectUser>
             .HasColumnType("datetime2");
         builder.Property(p => p.CreatedBy)
             .HasColumnName("createdby")
-            .HasMaxLength(20);
+            .HasMaxLength(50);
         builder.Property(p => p.LastModifiedBy)
             .HasColumnName("modifiedby")
-            .HasMaxLength(20);
+            .HasMaxLength(50);
         builder.HasOne(pu => pu.Project)
             .WithMany(p => p.ProjectUsers)
             .HasForeignKey(pu => pu.ProjectId);

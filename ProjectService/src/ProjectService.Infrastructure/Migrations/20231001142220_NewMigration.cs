@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProjectService.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCommit : Migration
+    public partial class NewMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,7 @@ namespace ProjectService.Infrastructure.Migrations
                     projectid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     projectName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     projectDescription = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ownerid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ownerid = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     workflowid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     projectstatus = table.Column<int>(type: "int", maxLength: 20, nullable: false),
                     created = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -61,18 +61,19 @@ namespace ProjectService.Infrastructure.Migrations
                 name: "projectusers",
                 columns: table => new
                 {
-                    userid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    projectuserid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     projectid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     userrole = table.Column<int>(type: "int", nullable: false),
                     created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    createdby = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    createdby = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     modified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    modifiedby = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    modifiedby = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_projectusers", x => new { x.userid, x.projectid });
+                    table.PrimaryKey("PK_projectusers", x => new { x.projectuserid, x.projectid });
                     table.ForeignKey(
                         name: "FK_projectusers_projects_projectid",
                         column: x => x.projectid,
@@ -104,7 +105,7 @@ namespace ProjectService.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "idx_projectusers_userid",
                 table: "projectusers",
-                column: "userid");
+                column: "projectuserid");
         }
 
         /// <inheritdoc />

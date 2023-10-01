@@ -24,7 +24,7 @@ namespace ProjectService.Infrastructure.Migrations
 
             modelBuilder.Entity("ProjectService.Domain.Entity.Component", b =>
                 {
-                    b.Property<Guid>("ComponentId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("componentid");
 
@@ -53,7 +53,7 @@ namespace ProjectService.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("modifiedby");
 
-                    b.HasKey("ComponentId", "ProjectId");
+                    b.HasKey("Id", "ProjectId");
 
                     b.HasIndex("ProjectId")
                         .HasDatabaseName("idx_components_projectid");
@@ -63,7 +63,7 @@ namespace ProjectService.Infrastructure.Migrations
 
             modelBuilder.Entity("ProjectService.Domain.Entity.Project", b =>
                 {
-                    b.Property<Guid>("ProjectId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("projectid");
 
@@ -88,8 +88,10 @@ namespace ProjectService.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("modifiedby");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uniqueidentifier")
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("ownerid");
 
                     b.Property<int>("ProjectStatus")
@@ -101,7 +103,7 @@ namespace ProjectService.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("workflowid");
 
-                    b.HasKey("ProjectId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ProjectStatus")
                         .HasDatabaseName("idx_projects_projectstatus");
@@ -114,9 +116,9 @@ namespace ProjectService.Infrastructure.Migrations
 
             modelBuilder.Entity("ProjectService.Domain.Entity.ProjectUser", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("userid");
+                        .HasColumnName("projectuserid");
 
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier")
@@ -127,8 +129,8 @@ namespace ProjectService.Infrastructure.Migrations
                         .HasColumnName("created");
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("createdby");
 
                     b.Property<bool>("IsDeleted")
@@ -139,21 +141,27 @@ namespace ProjectService.Infrastructure.Migrations
                         .HasColumnName("modified");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("modifiedby");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("username");
 
                     b.Property<int>("UserRole")
                         .HasColumnType("int")
                         .HasColumnName("userrole");
 
-                    b.HasKey("UserId", "ProjectId");
+                    b.HasKey("Id", "ProjectId");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("idx_projectusers_userid");
 
                     b.HasIndex("ProjectId")
                         .HasDatabaseName("idx_projectusers_projectid");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("idx_projectusers_userid");
 
                     b.ToTable("projectusers", (string)null);
                 });
@@ -166,7 +174,7 @@ namespace ProjectService.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("ProjectService.Domain.Entity.Details", "Details", b1 =>
+                    b.OwnsOne("ProjectService.Domain.Entity.Details", "ComponentDetails", b1 =>
                         {
                             b1.Property<Guid>("ComponentId")
                                 .HasColumnType("uniqueidentifier");
@@ -194,7 +202,7 @@ namespace ProjectService.Infrastructure.Migrations
                                 .HasForeignKey("ComponentId", "ComponentProjectId");
                         });
 
-                    b.Navigation("Details")
+                    b.Navigation("ComponentDetails")
                         .IsRequired();
 
                     b.Navigation("Project");
@@ -202,7 +210,7 @@ namespace ProjectService.Infrastructure.Migrations
 
             modelBuilder.Entity("ProjectService.Domain.Entity.Project", b =>
                 {
-                    b.OwnsOne("ProjectService.Domain.Entity.Details", "Details", b1 =>
+                    b.OwnsOne("ProjectService.Domain.Entity.Details", "ProjectDetails", b1 =>
                         {
                             b1.Property<Guid>("ProjectId")
                                 .HasColumnType("uniqueidentifier");
@@ -227,7 +235,7 @@ namespace ProjectService.Infrastructure.Migrations
                                 .HasForeignKey("ProjectId");
                         });
 
-                    b.Navigation("Details")
+                    b.Navigation("ProjectDetails")
                         .IsRequired();
                 });
 

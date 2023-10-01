@@ -4,13 +4,13 @@ namespace ProjectService.Domain.UnitTest.ProjectTests;
 public class ProjectTests
 {
     private readonly Project _project;
-    private readonly Guid _ownerId;
+    private readonly string _ownerId;
     private readonly Guid _workflowId;
     private readonly Details _details;
 
     public ProjectTests()
     {
-        _ownerId = Guid.NewGuid();
+        _ownerId = Guid.NewGuid().ToString();
         _workflowId = Guid.NewGuid();
         _details = new Details(ProjectUtilites.ProjectName,ProjectUtilites.ProjectDescription);
         _project = new Project(_details, _ownerId, _workflowId);
@@ -48,7 +48,7 @@ public class ProjectTests
     public void Project_AddUser_UserAdded()
     {
         // Arrange
-        var userId = Guid.NewGuid();
+        var userId = Guid.NewGuid().ToString();
 
         // Act
         _project.AddUser(userId, UserRole.user);
@@ -61,7 +61,7 @@ public class ProjectTests
     public void Project_RemoveUser_UserRemoved()
     {
         // Arrange
-        var userId = Guid.NewGuid();
+        var userId = Guid.NewGuid().ToString();
         _project.AddUser(userId, UserRole.user);
 
         // Act
@@ -75,7 +75,7 @@ public class ProjectTests
     public void Project_AddUsers_UsersAdded()
     {
         // Arrange
-        var userIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
+        var userIds = new List<string> { Guid.NewGuid().ToString(), Guid.NewGuid().ToString() };
 
         // Act
         _project.AddUsers(userIds);
@@ -88,7 +88,7 @@ public class ProjectTests
     public void Project_AddAdmin_AdminAdded()
     {
         // Arrange
-        var adminId = Guid.NewGuid();
+        var adminId = Guid.NewGuid().ToString();
 
         // Act
         _project.AddAdmin(adminId);
@@ -115,7 +115,7 @@ public class ProjectTests
     public void Project_RemoveAdmin_AdminRemoved()
     {
         // Arrange
-        var adminId = Guid.NewGuid();
+        var adminId = Guid.NewGuid().ToString();
         _project.AddAdmin(adminId);
 
         // Act
@@ -155,7 +155,7 @@ public class ProjectTests
     public void Project_RemoveUsers_UsersRemoved()
     {
         // Arrange
-        var userIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
+        var userIds = new List<string> { Guid.NewGuid().ToString(), Guid.NewGuid().ToString() };
         _project.AddUsers(userIds);
 
         // Act
