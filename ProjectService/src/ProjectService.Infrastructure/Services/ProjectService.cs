@@ -55,7 +55,7 @@ public class ProjectServices : IProjectService
     }
     public IQueryable<Project> GetProjects(
     ProjectStatus? status,
-    Guid? ownerId,
+    string? ownerId,
     DateTime? fromDate,
     DateTime? toDate,
     string? orderBy)
@@ -66,7 +66,7 @@ public class ProjectServices : IProjectService
         .AsNoTracking();
 
         query = ApplyFilter(query, () => status.HasValue, p => p.ProjectStatus == status.Value);
-        query = ApplyFilter(query, () => ownerId.HasValue, p => p.OwnerId == ownerId.Value);
+        query = ApplyFilter(query, () => !String.IsNullOrEmpty(ownerId), p => p.OwnerId == ownerId);
         query = ApplyFilter(query, () => fromDate.HasValue, p => p.Created >= fromDate.Value);
         query = ApplyFilter(query, () => toDate.HasValue, p => p.Created <= toDate.Value);
         query = ApplyOrder(query, orderBy);

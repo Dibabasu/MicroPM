@@ -14,7 +14,7 @@ namespace ProjectService.Application.Projects.Queries.GetProjects;
 public class GetProjectsQuery : IRequest<OneOf<PagedList<ProjectDto>, ProjectServiceException>>
 {
     public ProjectStatus? Status { get; set; }
-    public Guid? OwnerId { get; set; }
+    public string? OwnerId { get; set; }
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }
     public string OrderBy { get; set; } = string.Empty;

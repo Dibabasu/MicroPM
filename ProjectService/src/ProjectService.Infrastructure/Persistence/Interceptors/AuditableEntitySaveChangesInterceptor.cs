@@ -6,14 +6,17 @@ using ProjectService.Domain.Common;
 
 namespace ProjectService.Infrastructure.Persistence.Interceptors;
 
-public class AuditableEntitySaveChangesInterceptor: SaveChangesInterceptor
+public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
     private readonly IDateTime _dateTime;
 
+    private readonly ICustomClaimService _claimService;
+
     public AuditableEntitySaveChangesInterceptor(
-        IDateTime dateTime)
+        IDateTime dateTime, ICustomClaimService claimService)
     {
         _dateTime = dateTime;
+        _claimService = claimService;
     }
 
 
@@ -32,13 +35,13 @@ public class AuditableEntitySaveChangesInterceptor: SaveChangesInterceptor
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedBy = "test";
+                entry.Entity.CreatedBy = _claimService.GetUser();
                 entry.Entity.Created = _dateTime.UtcNow;
             }
 
             if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                entry.Entity.LastModifiedBy = "test";
+                entry.Entity.LastModifiedBy =_claimService.GetUser();
                 entry.Entity.LastModified = _dateTime.UtcNow;
             }
         }

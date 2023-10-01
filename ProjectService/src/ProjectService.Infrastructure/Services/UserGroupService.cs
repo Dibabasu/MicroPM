@@ -1,32 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ProjectService.Application.Common.Errors;
 using ProjectService.Application.Common.Interfaces;
+using ProjectService.Infrastructure.HttpClients;
 
 namespace ProjectService.Infrastructure.Services
 {
     public class UserGroupService : IUserGroupService
     {
-        public async Task<List<Guid>> GetUsersByIDAsync(Guid Id, CancellationToken cancellationToken)
-        {
-           List<Guid> newGuids = new()
-            {
-                Guid.NewGuid(),
-                Guid.NewGuid()
-            };
-            return newGuids;
-        }
+        private readonly UserGroupServiceClient _usergroupServiceClient;
 
-        public async Task<List<Guid>> GetUsersByNameAsync(string userGroupNames, CancellationToken cancellationToken)
+        public UserGroupService(UserGroupServiceClient userGroupServiceClient)
         {
-            ///retrun a list of new guids
-            List<Guid> newGuids = new()
-            {
-                Guid.NewGuid(),
-                Guid.NewGuid()
-            };
-            return newGuids;
+            _usergroupServiceClient = userGroupServiceClient;
+        }
+        public async Task<List<string>> GetUsersByNameAsync(string userGroupNames, CancellationToken cancellationToken)
+        {
+            var users = await _usergroupServiceClient.GetUsersByGroup(userGroupNames, cancellationToken)
+            ?? throw new NotFoundException(userGroupNames);
+
+            return users.Select(user => user.UserName).ToList();
         }
     }
 }

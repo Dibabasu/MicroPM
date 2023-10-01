@@ -14,6 +14,7 @@ public class ProjectServicesTests
 {
     private readonly ProjectServices _projectServices;
     private readonly ProjectServiceDbContext _context;
+    private readonly ICustomClaimService _claimService;
 
     public ProjectServicesTests()
     {
@@ -24,8 +25,8 @@ public class ProjectServicesTests
         var mockMediator = Substitute.For<IMediator>();
         var mockDateTime = Substitute.For<IDateTime>();
         mockDateTime.UtcNow.Returns(DateTime.UtcNow);
-
-        var auditableEntitySaveChangesInterceptor = new AuditableEntitySaveChangesInterceptor(mockDateTime);
+        _claimService = Substitute.For<ICustomClaimService>(); 
+        var auditableEntitySaveChangesInterceptor = new AuditableEntitySaveChangesInterceptor(mockDateTime,_claimService);
 
         _context = new ProjectServiceDbContext(options, auditableEntitySaveChangesInterceptor, mockMediator);
         _projectServices = new ProjectServices(_context);
@@ -35,7 +36,7 @@ public class ProjectServicesTests
     public async Task ProjectServices_AddProject_ProjectAddedToDatabase()
     {
         // Arrange
-        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid(), Guid.NewGuid());
+        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid().ToString(), Guid.NewGuid());
 
         // Act
         var projectId = await _projectServices.AddProject(project);
@@ -50,7 +51,7 @@ public class ProjectServicesTests
     public async Task ProjectServices_DeleteProjectById_ProjectRemovedFromDatabase()
     {
         // Arrange
-        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid(), Guid.NewGuid());
+        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid().ToString(), Guid.NewGuid());
         var projectId = await _projectServices.AddProject(project);
 
         // Act
@@ -66,7 +67,7 @@ public class ProjectServicesTests
     public async Task ProjectServices_GetProjectById_ProjectReturnedIfExists()
     {
         // Arrange
-        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid(), Guid.NewGuid());
+        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid().ToString(), Guid.NewGuid());
         var projectId = await _projectServices.AddProject(project);
 
         // Act
@@ -81,7 +82,7 @@ public class ProjectServicesTests
     public async Task ProjectServices_GetProjectByName_ProjectReturnedIfExists()
     {
         // Arrange
-        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid(), Guid.NewGuid());
+        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid().ToString(), Guid.NewGuid());
         await _projectServices.AddProject(project);
 
         // Act
@@ -95,7 +96,7 @@ public class ProjectServicesTests
     public async Task ProjectServices_UpdateProject_ProjectUpdatedInDatabase()
     {
         // Arrange
-        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid(), Guid.NewGuid());
+        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid().ToString(), Guid.NewGuid());
         var projectId = await _projectServices.AddProject(project);
         project.UpdateDetails(new Details("Updated Project", "This is an updated test project"));
 
@@ -114,8 +115,8 @@ public class ProjectServicesTests
 
         // Arrange
         _context.Projects.RemoveRange(_context.Projects);
-        var project1 = new Project(new Details("Test Project 1", "This is a test project"), Guid.NewGuid(), Guid.NewGuid());
-        var project2 = new Project(new Details("Test Project 2", "This is another test project"), Guid.NewGuid(), Guid.NewGuid());
+        var project1 = new Project(new Details("Test Project 1", "This is a test project"), Guid.NewGuid().ToString(), Guid.NewGuid());
+        var project2 = new Project(new Details("Test Project 2", "This is another test project"), Guid.NewGuid().ToString(), Guid.NewGuid());
         await _projectServices.AddProject(project1);
         await _projectServices.AddProject(project2);
 
@@ -150,7 +151,7 @@ public class ProjectServicesTests
     public async Task ProjectServices_DeleteProjectById_ReturnsFalseIfProjectDoesNotExist()
     {
         // Arrange
-        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid(), Guid.NewGuid());
+        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid().ToString(), Guid.NewGuid());
 
         // Act
         var result = await _projectServices.DeleteProjectById(project, default);
@@ -164,7 +165,7 @@ public class ProjectServicesTests
     public async Task ProjectServices_UpdateProject_ThrowsExceptionIfProjectDoesNotExist()
     {
         // Arrange
-        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid(), Guid.NewGuid());
+        var project = new Project(new Details("Test Project", "This is a test project"), Guid.NewGuid().ToString(), Guid.NewGuid());
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _projectServices.UpdateProject(project, default));

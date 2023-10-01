@@ -11,7 +11,6 @@ using ProjectService.Infrastructure.Services;
 using ProjectService.Application.Common.Settings;
 using ProjectService.Infrastructure.HttpClients;
 using ProjectService.Infrastructure.Common;
-using Polly;
 
 namespace ProjectService.Infrastructure;
 
@@ -38,6 +37,13 @@ public static class ConfigureServices
        .AddCheck<DatabaseHealthCheck>("Database");
 
         services.AddHttpClient<UserServiceClient>(client =>
+        {
+            var userServiceSettings = configuration.GetSection("UserService").Get<UserServiceSettings>();
+            client.BaseAddress = new Uri(userServiceSettings!.BaseUrl);
+        })
+        .AddPolicyHandler(PollyPolicyFactory.GetRetryPolicy());
+
+        services.AddHttpClient<UserGroupServiceClient>(client =>
         {
             var userServiceSettings = configuration.GetSection("UserService").Get<UserServiceSettings>();
             client.BaseAddress = new Uri(userServiceSettings!.BaseUrl);

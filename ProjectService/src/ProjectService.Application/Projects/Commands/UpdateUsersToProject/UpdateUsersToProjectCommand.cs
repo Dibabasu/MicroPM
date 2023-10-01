@@ -35,15 +35,14 @@ public class UpdateUsersToProjectCommandHandler : IRequestHandler<UpdateUsersToP
             {
                 foreach (var userName in request.UserNames)
                 {
-                    Guid userId = await _userService.GetUserIdByUserNameAsync(userName, cancellationToken);
-                    if (userId == Guid.Empty)
+                    string userId = await _userService.GetUserIdByUserNameAsync(userName, cancellationToken);
+                    if (userId == string.Empty)
                     {
                         throw new NotFoundException("userName", userName);
                     }
                     if (request.RequestType == RequestType.add)
                     {
-                        project.AddUser(userId, UserRole.user
-                        );
+                        project.AddUser(userId, UserRole.user);
                     }
                     else
                     {

@@ -44,7 +44,7 @@ public class BaseEntityTests
         private Project CreateTestProject()
         {
             var projectDetails = new Details("Test Project", "This is a test project");
-            var ownerId = Guid.NewGuid();
+            var ownerId = Guid.NewGuid().ToString();
             var workflowId = Guid.NewGuid();
             return new Project(projectDetails, ownerId, workflowId);
         }

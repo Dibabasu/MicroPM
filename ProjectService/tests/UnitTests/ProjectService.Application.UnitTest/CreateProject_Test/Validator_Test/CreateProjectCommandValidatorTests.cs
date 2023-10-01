@@ -80,7 +80,7 @@ public class CreateProjectCommandValidatorTests
 
         var projectDetails = new Details(CreateProjectUtility.ProjectName, CreateProjectUtility.ProjectDescription);
         _projectService.GetProjectByNameAsync(command.ProjectName,
-            Arg.Any<CancellationToken>()).Returns(new Project(projectDetails, Guid.NewGuid(), Guid.NewGuid()));
+            Arg.Any<CancellationToken>()).Returns(new Project(projectDetails, Guid.NewGuid().ToString(), Guid.NewGuid()));
         var result = await _validator.TestValidateAsync(command);
         result.ShouldHaveValidationErrorFor(x => x.ProjectName);
     }
@@ -118,7 +118,7 @@ public class CreateProjectCommandValidatorTests
         (
             name: CreateProjectUtility.ProjectName,
             description: CreateProjectUtility.ProjectDescription,
-            owner: null
+            owner: string.Empty
         );
         var result = await _validator.TestValidateAsync(command);
         result.ShouldHaveValidationErrorFor(x => x.Owner);

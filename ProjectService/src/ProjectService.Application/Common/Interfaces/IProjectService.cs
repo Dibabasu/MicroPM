@@ -12,7 +12,7 @@ public interface IProjectService
 
     public IQueryable<Project> GetProjects(
     ProjectStatus? Status,
-    Guid? OwnerId,
+    string? OwnerId,
     DateTime? FromDate,
     DateTime? ToDate,
     string? OrderBy);
