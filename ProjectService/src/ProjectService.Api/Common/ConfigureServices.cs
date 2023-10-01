@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using ProjectService.Api.Common.Interfaces;
-using ProjectService.Api.Common.Services;
 using ProjectService.Api.Filters;
 
 namespace ProjectService.Api.Common;
@@ -29,7 +27,7 @@ public static class ConfigureServices
                 ValidateAudience = false
             };
         });
-        services.AddScoped<ICustomClaimService, CustomClaimService>();
+        
         return services;
     }
 }

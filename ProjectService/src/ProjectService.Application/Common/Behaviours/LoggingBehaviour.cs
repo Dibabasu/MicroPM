@@ -1,4 +1,5 @@
 using MediatR.Pipeline;
+using ProjectService.Application.Common.Interfaces;
 using Serilog;
 
 namespace ProjectService.Application.Common.Behaviours;
@@ -10,16 +11,18 @@ public class LoggingBehaviour<TRequest, TResponse> :
     where TRequest : notnull
 {
     private readonly ILogger _logger;
+    private readonly ICustomClaimService _claimService;
 
-    public LoggingBehaviour()
+    public LoggingBehaviour(ICustomClaimService claimService)
     {
         _logger = Log.ForContext<LoggingBehaviour<TRequest, TResponse>>();
+        _claimService = claimService;
     }
 
     public async Task Process(TRequest request, CancellationToken cancellationToken)
     {
         var requestName = typeof(TRequest).Name;
-        string userName = string.Empty; // Consider fetching the actual username if possible
+        string userName =  _claimService.GetUser();
 
         _logger.Information("Project Service Request: {Name}  {@UserName} {@Request}",
             requestName, userName, request);

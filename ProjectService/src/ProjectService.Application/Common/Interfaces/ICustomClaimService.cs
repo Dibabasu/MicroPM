@@ -1,4 +1,4 @@
-namespace ProjectService.Api.Common.Interfaces;
+namespace ProjectService.Application.Common.Interfaces;
 
 public interface ICustomClaimService
 {

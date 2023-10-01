@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProjectService.Api.Common.Interfaces;
 using ProjectService.Application.Common.Interfaces;
 
 namespace ProjectService.Api.Controllers;

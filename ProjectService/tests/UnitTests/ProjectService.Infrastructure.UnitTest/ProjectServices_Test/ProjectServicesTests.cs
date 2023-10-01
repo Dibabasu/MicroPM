@@ -14,6 +14,7 @@ public class ProjectServicesTests
 {
     private readonly ProjectServices _projectServices;
     private readonly ProjectServiceDbContext _context;
+    private readonly ICustomClaimService _claimService;
 
     public ProjectServicesTests()
     {
@@ -24,8 +25,8 @@ public class ProjectServicesTests
         var mockMediator = Substitute.For<IMediator>();
         var mockDateTime = Substitute.For<IDateTime>();
         mockDateTime.UtcNow.Returns(DateTime.UtcNow);
-
-        var auditableEntitySaveChangesInterceptor = new AuditableEntitySaveChangesInterceptor(mockDateTime);
+        _claimService = Substitute.For<ICustomClaimService>(); 
+        var auditableEntitySaveChangesInterceptor = new AuditableEntitySaveChangesInterceptor(mockDateTime,_claimService);
 
         _context = new ProjectServiceDbContext(options, auditableEntitySaveChangesInterceptor, mockMediator);
         _projectServices = new ProjectServices(_context);

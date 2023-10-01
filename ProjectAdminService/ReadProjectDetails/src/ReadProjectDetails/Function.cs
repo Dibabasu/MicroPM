@@ -39,38 +39,56 @@ public class Function
     {
         foreach (var message in evnt.Records)
         {
-            await ProcessMessageAsync(message, context);
+            try
+            {
+                await ProcessMessageAsync(message, context);
+            }
+            catch (Exception ex)
+            {
+                context.Logger.LogError($"Error processing message {message.MessageId}: {ex.Message}");
+            }
         }
     }
-
     private async Task ProcessMessageAsync(SQSEvent.SQSMessage message, ILambdaContext context)
     {
-        context.Logger.LogInformation($"Processed message {message.Body}");
+        context.Logger.LogInformation($"Processing message {message.Body}");
 
-        // Deserialize the SQS message
-        var sqsMessage = JsonSerializer.Deserialize<SqsMessage>(message.Body);
-
-        // Deserialize the project message
-        var projectMessage = JsonSerializer.Deserialize<ProjectMessage>(sqsMessage!.Message);
-
-        ///write code to store details into dynamo db table
-        var dynamoDbItem = new DynamoDbItem
+        try
         {
-            Id = message.MessageId,
-            ProjectName = projectMessage.Project.ProjectDetails.Name,
-            ProjectDescription = projectMessage.Project.ProjectDetails.Description,
-            OwnerId = projectMessage.Project.OwnerId,
-            ProjectId = projectMessage.Project.Id,
-            ProjectStatus= projectMessage.Project.ProjectStatus,
-            Message = message.Body
-        };
-        context.Logger.LogInformation($"Storing data to dynamo db table Id : {message.MessageId}");
+            // Deserialize the SQS message
+            var sqsMessage = JsonSerializer.Deserialize<SqsMessage>(message.Body);
 
-        await _context.SaveAsync(dynamoDbItem, new DynamoDBOperationConfig
+            // Deserialize the project message
+            var projectMessage = JsonSerializer.Deserialize<ProjectMessage>(sqsMessage!.Message);
+
+            ///write code to store details into dynamo db table
+            var dynamoDbItem = new DynamoDbItem
+            {
+                Id = message.MessageId,
+                ProjectName = projectMessage!.Project.ProjectDetails.Name,
+                ProjectDescription = projectMessage.Project.ProjectDetails.Description,
+                OwnerId = projectMessage.Project.OwnerId,
+                ProjectId = projectMessage.Project.Id,
+                ProjectStatus = projectMessage.Project.ProjectStatus,
+                Message = message.Body,
+                IsProccessed = false
+
+            };
+            await _context.SaveAsync(dynamoDbItem, new DynamoDBOperationConfig
+            {
+                OverrideTableName = _tableName
+            });
+        }
+        catch (JsonException ex)
         {
-            OverrideTableName = _tableName
-        });
-        context.Logger.LogInformation($"Saved to dynamo db table");
+            context.Logger.LogError($"Error deserializing message {message.Body}: {ex.Message}");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            context.Logger.LogError($"Error processing message {message.Body}: {ex.Message}");
+            throw;
+        }
     }
 }
 public class DynamoDbItem
@@ -92,6 +110,8 @@ public class DynamoDbItem
     [DynamoDBProperty]
     public string ProjectId { get; set; } = string.Empty;
     [DynamoDBProperty]
-    public int ProjectStatus{get;set;}
+    public int ProjectStatus { get; set; }
+    [DynamoDBProperty]
+    public bool IsProccessed { get; set; }
 
 }

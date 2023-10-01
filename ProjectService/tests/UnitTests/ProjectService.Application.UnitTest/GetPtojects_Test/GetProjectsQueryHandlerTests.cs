@@ -18,6 +18,8 @@ public class GetProjectsQueryHandlerTests
     private readonly GetProjectsQueryHandler _handler;
     private readonly IProjectService _projectService;
     private readonly ProjectServiceDbContext _context;
+     private readonly ICustomClaimService _claimService;
+    
 
     public GetProjectsQueryHandlerTests()
     {
@@ -28,8 +30,8 @@ public class GetProjectsQueryHandlerTests
         var mockMediator = Substitute.For<IMediator>();
         var mockDateTime = Substitute.For<IDateTime>();
         mockDateTime.UtcNow.Returns(DateTime.UtcNow);
-
-        var auditableEntitySaveChangesInterceptor = new AuditableEntitySaveChangesInterceptor(mockDateTime);
+        _claimService = Substitute.For<ICustomClaimService>(); 
+        var auditableEntitySaveChangesInterceptor = new AuditableEntitySaveChangesInterceptor(mockDateTime,_claimService);
 
         _context = new ProjectServiceDbContext(options, auditableEntitySaveChangesInterceptor, mockMediator);
         _context.Projects.Add(new Project(new Details("Test", "Test"), Guid.NewGuid(), Guid.NewGuid()));
